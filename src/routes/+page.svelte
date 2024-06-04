@@ -1,7 +1,22 @@
 <script>
-	import Counter from './Counter.svelte';
-	import welcome from '$lib/images/svelte-welcome.webp';
-	import welcome_fallback from '$lib/images/svelte-welcome.png';
+	import Counter from "./Counter.svelte";
+	import welcome from "$lib/images/svelte-welcome.webp";
+	import welcome_fallback from "$lib/images/svelte-welcome.png";
+	import { runModel } from "./predict";
+
+	const [res, time] = runModel(session, data);
+	var output = res.data;
+	var inferenceTime = time;
+	var results = softmax(Array.prototype.slice.call(output));
+
+	var topResults = [];
+	for (let i = 0; i < results.length; i++) {
+		if (results[i] > 0.3) {
+			topResults.push([classes[i] + ": " + results[i]]);
+		}
+	}
+
+	console.log(topResults);
 </script>
 
 <svelte:head>
@@ -10,22 +25,7 @@
 </svelte:head>
 
 <section>
-	<h1>
-		<span class="welcome">
-			<picture>
-				<source srcset={welcome} type="image/webp" />
-				<img src={welcome_fallback} alt="Welcome" />
-			</picture>
-		</span>
-
-		to your new<br />SvelteKit app
-	</h1>
-
-	<h2>
-		try editing <strong>src/routes/+page.svelte</strong>
-	</h2>
-
-	<Counter />
+	<!-- <Counter /> -->
 </section>
 
 <style>
