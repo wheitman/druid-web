@@ -2,21 +2,12 @@
 	import Counter from "./Counter.svelte";
 	import welcome from "$lib/images/svelte-welcome.webp";
 	import welcome_fallback from "$lib/images/svelte-welcome.png";
-	import { runModel } from "./predict";
+	import { main } from "./predict";
+	import { onMount } from "svelte";
 
-	const [res, time] = runModel(session, data);
-	var output = res.data;
-	var inferenceTime = time;
-	var results = softmax(Array.prototype.slice.call(output));
-
-	var topResults = [];
-	for (let i = 0; i < results.length; i++) {
-		if (results[i] > 0.3) {
-			topResults.push([classes[i] + ": " + results[i]]);
-		}
-	}
-
-	console.log(topResults);
+	onMount(() => {
+		main();
+	});
 </script>
 
 <svelte:head>
