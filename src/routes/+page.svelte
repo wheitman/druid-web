@@ -16,6 +16,8 @@
 </svelte:head>
 
 <section>
+	<img src="src/lib/images/1397613.jpg" id="input-img" alt="Network input" />
+	<canvas id="input-canvas" width="224" height="224"></canvas>
 	<!-- <Counter /> -->
 </section>
 
@@ -26,6 +28,9 @@
 		justify-content: center;
 		align-items: center;
 		flex: 0.6;
+	}
+
+	#input-img {
 	}
 
 	h1 {
@@ -46,5 +51,10 @@
 		height: 100%;
 		top: 0;
 		display: block;
+	}
+
+	#input-canvas {
+		width: 224px;
+		height: 224px;
 	}
 </style>
