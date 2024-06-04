@@ -19,7 +19,7 @@
 	<!-- <img src="src/lib/images/1397613.jpg" id="input-img" alt="Network input" /> -->
 	<!-- <img src="src/lib/images/1497667.jpg" id="input-img" alt="Network input" /> -->
 	<img src="src/lib/images/1359483.jpg" id="input-img" alt="Network input" />
-	<canvas id="input-canvas" width="224" height="224"></canvas>
+	<!-- <canvas id="input-canvas" width="224" height="224"></canvas> -->
 	<!-- <Counter /> -->
 </section>
 

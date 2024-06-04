@@ -102,7 +102,7 @@ export async function main() {
     var c = document.getElementById("input-canvas") as HTMLCanvasElement;
     var ctx = c.getContext("2d");
     var img = document.getElementById("input-img") as HTMLImageElement;
-    ctx.drawImage(img, 0, 0, 437, 437, 0, 0, 224, 224);
+    // ctx.drawImage(img, 0, 0, 437, 437, 0, 0, 224, 224);
 
     // input_img_element.decode
 
@@ -126,7 +126,7 @@ export async function main() {
 
     let normed_image_data = new ImageData(Uint8ClampedArray.from(pixel_array), 224, 224)
 
-    ctx?.putImageData(normed_image_data, 0, 0)
+    // ctx?.putImageData(normed_image_data, 0, 0)
     console.log(input_tensor)
 
     // // prepare feeds. use model input names as keys.
