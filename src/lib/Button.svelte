@@ -1,9 +1,11 @@
 <script>
     export let type = "secondary";
+    export let loading = false;
 </script>
 
 <button
     class="lined thick w-full border-green-400 text-4xl sm:text-xl m-0 py-1"
+    class:animate-pulse={loading}
     class:primary={type == "primary"}
     on:click
     on:mouseover

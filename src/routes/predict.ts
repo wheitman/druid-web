@@ -90,13 +90,13 @@ function argmax(arr: Float32Array) {
 
 
 export async function main() {
-    ort.env.wasm.wasmPaths = "node_modules/onnxruntime-web/dist/"
+    ort.env.wasm.wasmPaths = "wasm/"
     // create a new session and load the specific model.
     //
     // the model in this example contains a single MatMul node
     // it has 2 inputs: 'a'(float32, 3x4) and 'b'(float32, 4x3)
     // it has 1 output: 'c'(float32, 3x3)
-    const session = await ort.InferenceSession.create('src/lib/plantnet-18.onnx');
+    const session = await ort.InferenceSession.create('plantnet-18.onnx');
 
 
     var c = document.getElementById("input-canvas") as HTMLCanvasElement;

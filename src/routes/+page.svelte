@@ -12,6 +12,7 @@
 	import flip_svg from "$lib/images/flip.svg";
 	import magnifying_svg from "$lib/images/magnifying-glass.svg";
 	import shuffle_svg from "$lib/images/shuffle.svg";
+	import snap_mp3 from "$lib/audio/snap.mp3";
 	// import Webcam from 'webcam-easy';
 
 	let image_ids = [
@@ -35,6 +36,8 @@
 	let show_species_details = false;
 	let species_description = "";
 	let wiki_page_id = 0;
+
+	let prediction_in_progress = false;
 
 	let webcam;
 
@@ -79,13 +82,18 @@
 	function changeImage() {
 		console.log("Choosing random image.");
 		let image_id = image_ids[Math.floor(Math.random() * image_ids.length)];
-		image_path = `src/lib/images/plants/${image_id}.jpg`;
+		image_path = `plants/${image_id}.jpg`;
 		species_name = "Mystery plant";
 		show_species_details = false;
 	}
 
 	async function makePrediction() {
+		prediction_in_progress = true;
+
+		// This is the MOST IMPORTANT LINE:
+		// It actually runs the neural network
 		species_name = await main();
+
 		let wiki_results = await searchWikipedia(species_name);
 		stopCamera();
 		console.log(wiki_results.query);
@@ -95,6 +103,7 @@
 		species_element.innerHTML =
 			wiki_results.query.search[0].snippet + "...";
 		show_species_details = true;
+		prediction_in_progress = false;
 	}
 
 	async function searchWikipedia(searchQuery) {
@@ -155,8 +164,11 @@
 </script>
 
 <svelte:head>
-	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
+	<title>Druid Plant ID</title>
+	<meta
+		name="description"
+		content="Plant identification tool that runs on device"
+	/>
 </svelte:head>
 
 <section>
@@ -164,7 +176,7 @@
 	<!-- <img src="src/lib/images/1497667.jpg" id="input-img" alt="Network input" /> -->
 	<video
 		class:hidden={!webcam_enabled}
-		class="rounded-lg"
+		class="rounded-xl"
 		id="webcam"
 		autoplay
 		playsinline
@@ -173,12 +185,13 @@
 	>
 
 	<canvas id="canvas" class="hidden"></canvas>
-	<audio id="snapSound" src="audio/snap.wav" preload="auto"></audio>
+	<audio id="snapSound" src={snap_mp3} preload="auto"></audio>
 	<img
 		class:hidden={webcam_enabled}
 		src={image_path}
 		id="input-img"
 		alt="Network input"
+		class="rounded-xl"
 	/>
 	<p
 		class="text-2xl italic font-semibold text-center"
@@ -212,7 +225,10 @@
 				/>Use camera
 			</span></Button
 		>
-		<Button type="primary" on:click={makePrediction}
+		<Button
+			type="primary"
+			on:click={makePrediction}
+			loading={prediction_in_progress}
 			><span
 				><img
 					src={magnifying_svg}
