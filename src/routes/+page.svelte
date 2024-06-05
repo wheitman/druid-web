@@ -32,6 +32,9 @@
 	let multiple_cameras = false;
 
 	let webcam_enabled = false;
+	let show_species_details = false;
+	let species_description = "";
+	let wiki_page_id = 0;
 
 	let webcam;
 
@@ -69,15 +72,44 @@
 		startCamera();
 	});
 
+	function goToWikipedia() {
+		window.location.href = `http://en.wikipedia.org/wiki?curid=${wiki_page_id}`;
+	}
+
 	function changeImage() {
 		console.log("Choosing random image.");
 		let image_id = image_ids[Math.floor(Math.random() * image_ids.length)];
 		image_path = `src/lib/images/plants/${image_id}.jpg`;
 		species_name = "Mystery plant";
+		show_species_details = false;
 	}
 
 	async function makePrediction() {
 		species_name = await main();
+		let wiki_results = await searchWikipedia(species_name);
+		stopCamera();
+		console.log(wiki_results.query);
+		species_description = wiki_results.query.search[0].snippet;
+		wiki_page_id = wiki_results.query.search[0].pageid;
+		const species_element = document.getElementById("species-desc");
+		species_element.innerHTML =
+			wiki_results.query.search[0].snippet + "...";
+		show_species_details = true;
+	}
+
+	async function searchWikipedia(searchQuery) {
+		const endpoint = `https://en.wikipedia.org/w/api.php?action=query&list=search&prop=info&inprop=url&utf8=&format=json&origin=*&srlimit=20&srsearch=${searchQuery}`;
+		const response = await fetch(endpoint);
+		if (!response.ok) {
+			throw Error(response.statusText);
+		}
+		const json = await response.json();
+		return json;
+	}
+
+	function hideSpeciesDetails() {
+		show_species_details = false;
+		console.log("Species details hidden");
 	}
 
 	async function takePicture() {
@@ -87,6 +119,7 @@
 		let blob = dataURItoBlob(picture);
 		let arr = new Uint8Array(await blob.arrayBuffer());
 		console.log(arr);
+		stopCamera();
 		webcam_enabled = false;
 	}
 
@@ -147,40 +180,46 @@
 		id="input-img"
 		alt="Network input"
 	/>
-	<p class="text-2xl italic font-semibold" class:hidden={webcam_enabled}>
+	<p
+		class="text-2xl italic font-semibold text-center"
+		class:hidden={webcam_enabled}
+	>
 		{species_name}
+	</p>
+	<p class="text-md" id="species-desc" class:hidden={!show_species_details}>
+		<!-- {species_description} -->
 	</p>
 	<div
 		id="button-group"
-		class:hidden={webcam_enabled}
-		class="absolute sm:relative bottom-0 w-full flex flex-col items-center py-4 px-4"
+		class:hidden={webcam_enabled || show_species_details}
+		class="absolute sm:relative bottom-0 w-full flex flex-col items-center py-1 px-4"
 	>
 		<Button on:click={changeImage}
 			><span
-				>Change image <img
+				><img
 					src={shuffle_svg}
-					class="h-10 sm:h-6 inline pl-1"
+					class="h-10 sm:h-6 inline pr-4"
 					alt=""
-				/></span
-			></Button
+				/>Change image
+			</span></Button
 		>
 		<Button on:click={startCamera}
 			><span
-				>Use camera <img
+				><img
 					src={camera_svg}
-					class="h-10 sm:h-6 inline pl-1"
+					class="h-10 sm:h-6 inline pr-4"
 					alt=""
-				/></span
-			></Button
+				/>Use camera
+			</span></Button
 		>
 		<Button type="primary" on:click={makePrediction}
 			><span
-				>Identify <img
+				><img
 					src={magnifying_svg}
-					class="h-10 sm:h-6 inline pl-1"
+					class="h-10 sm:h-6 inline pr-4"
 					alt=""
-				/></span
-			></Button
+				/>Identify
+			</span></Button
 		>
 
 		<canvas id="input-canvas" width="224" height="224" class="hidden"
@@ -208,6 +247,26 @@
 
 		<canvas id="input-canvas" width="224" height="224" class="hidden"
 		></canvas>
+	</div>
+
+	<div
+		id="button-group"
+		class:hidden={!show_species_details}
+		class="absolute bottom-0 w-full max-w-[45vh] flex flex-col items-center place-content-around py-4 px-auto"
+	>
+		<Button on:click={goToWikipedia}><span>Go to Wikipedia</span></Button>
+		<Button on:click={hideSpeciesDetails}
+			><span
+				><img
+					src={back_svg}
+					class="h-8 sm:h-6 inline pr-2"
+					alt=""
+				/>Search again
+			</span></Button
+		>
+		<!-- <button class="w-16 h-16" on:click={hideSpeciesDetails}>
+			<img src={back_svg} alt="" />
+		</button> -->
 	</div>
 	<!-- <canvas id="input-canvas" width="224" height="224"></canvas> -->
 	<!-- <Counter /> -->

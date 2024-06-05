@@ -3,7 +3,7 @@
 </script>
 
 <button
-    class="lined thick w-full border-green-400 text-4xl sm:text-xl"
+    class="lined thick w-full border-green-400 text-4xl sm:text-xl m-0 py-1"
     class:primary={type == "primary"}
     on:click
     on:mouseover
@@ -17,7 +17,7 @@
 <style>
     button {
         background: transparent;
-        padding: 0.5rem 0.5rem;
+        /* padding: 0.5rem 0.5rem; */
         margin: 0 0.5rem;
         /* font-size: 1rem; */
 
