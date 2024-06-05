@@ -256,7 +256,6 @@
 			class="w-16 h-16"
 			class:opacity-30={!multiple_cameras}
 			on:click={flipCamera}
-			disabled={!multiple_cameras}
 		>
 			<img src={flip_svg} alt="" />
 		</button>
@@ -292,7 +291,7 @@
 	section {
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
+		/* justify-content: center; */
 		align-items: center;
 		flex: 0.6;
 	}
