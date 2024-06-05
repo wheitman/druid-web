@@ -104,6 +104,7 @@
 	}
 
 	async function makePrediction() {
+		species_name = "Thinking... Please wait.";
 		prediction_in_progress = true;
 
 		// This is the MOST IMPORTANT LINE:
@@ -254,6 +255,7 @@
 		<p
 			class="text-2xl italic font-semibold text-center"
 			class:hidden={webcam_enabled || show_start}
+			class:animate-pulse={species_name == "Thinking... Please wait."}
 		>
 			{species_name}
 		</p>
