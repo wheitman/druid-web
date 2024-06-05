@@ -1,4 +1,5 @@
 @import '@fontsource/fira-mono';
+@import url('https://fonts.googleapis.com/css2?family=Ysabeau:ital,wght@0,1..1000;1,1..1000&display=swap');
 
 :root {
 	--font-body: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
@@ -12,7 +13,8 @@
 	--color-text: rgba(0, 0, 0, 0.7);
 	--column-width: 42rem;
 	--column-margin-top: 4rem;
-	font-family: var(--font-body);
+	font-family: "Ysabeau", sans-serif;
+	font-style: italic;
 	color: var(--color-text);
 }
 

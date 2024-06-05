@@ -5,15 +5,15 @@
 </script>
 
 <div class="app">
-	<main>
+	<main class="sm:rounded-3xl mx-auto sm:my-10">
 		<slot />
 	</main>
 
-	<footer>
-		<!-- <p>
+	<!-- <footer>
+		<p>
 			visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to learn SvelteKit
-		</p> -->
-	</footer>
+		</p>
+	</footer> -->
 </div>
 
 <style>
@@ -31,8 +31,10 @@
 		width: 100%;
 		max-width: 45vh;
 		/* max-width: 64rem;1 */
-		margin: 0 auto;
+		/* margin: 1rem auto; */
 		box-sizing: border-box;
+		/* background-color: #cce2f5; */
+		/* border-radius: 2rem; */
 	}
 
 	footer {
