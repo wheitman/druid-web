@@ -6,6 +6,12 @@ import ndarray from 'ndarray'
 import class_to_idx from './class_to_idx.json'
 import id_to_species from './plantnet300K_species_id_2_name.json'
 
+function softmax(arr) {
+    return arr.map(function (value, index) {
+        return Math.exp(value) / arr.map(function (y /*value*/) { return Math.exp(y) }).reduce(function (a, b) { return a + b })
+    })
+}
+
 // FROM: https://onnxruntime.ai/docs/tutorials/web/classify-images-nextjs-github-template.html
 function imageDataToTensor(image: ImageData, dims: number[]): [ort.Tensor, Array<number>] {
 
@@ -135,16 +141,17 @@ export async function main() {
     // // feed inputs and run
     const results = await session.run(feeds);
 
-    console.log(results)
+    let probs = softmax(results.class_idx.data)
+    console.log(probs)
 
     // // read from results
     const dataC = results.class_idx.data;
-    console.log(`data of result tensor 'c': ${argmax(dataC)}...`);
+    console.log(`data of result tensor 'c': ${probs[argmax(dataC)]}...`);
 
     let class_id = class_to_idx[argmax(dataC)]
     console.log(id_to_species[class_id])
 
-    return id_to_species[class_id];
+    return [id_to_species[class_id], probs[argmax(dataC)]];
     // console.log(id_to_species["1397613"])
 
     // console.log(dataC[class_to_idx.indexOf('1397613')])
