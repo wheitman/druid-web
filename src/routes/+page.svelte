@@ -8,6 +8,7 @@
 	import shuffle_svg from "$lib/images/shuffle.svg";
 	import camera_svg from "$lib/images/camera.svg";
 	import magnifying_svg from "$lib/images/magnifying-glass.svg";
+	// import Webcam from 'webcam-easy';
 
 	let image_ids = [
 		"1391963",
@@ -23,16 +24,43 @@
 		"1497667",
 	];
 	let image_path = "";
+	let species_name = "Mystery plant";
+
+	let webcam;
 
 	onMount(() => {
 		changeImage();
 		main();
+		const webcamElement = document.getElementById("webcam");
+		const canvasElement = document.getElementById("canvas");
+		const snapSoundElement = document.getElementById("snapSound");
+		webcam = new Webcam(
+			webcamElement,
+			"user",
+			canvasElement,
+			snapSoundElement,
+		);
 	});
+	function startCamera() {
+		webcam
+			.start()
+			.then((result) => {
+				console.log("webcam started");
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	}
 
 	function changeImage() {
 		console.log("Choosing random image.");
 		let image_id = image_ids[Math.floor(Math.random() * image_ids.length)];
 		image_path = `src/lib/images/plants/${image_id}.jpg`;
+		species_name = "Mystery plant";
+	}
+
+	async function makePrediction() {
+		species_name = await main();
 	}
 </script>
 
@@ -44,8 +72,14 @@
 <section>
 	<!-- <img src="src/lib/images/1397613.jpg" id="input-img" alt="Network input" /> -->
 	<!-- <img src="src/lib/images/1497667.jpg" id="input-img" alt="Network input" /> -->
+	<video id="webcam" autoplay playsinline width="640" height="640"
+		><track kind="captions" /></video
+	>
+
+	<!-- <canvas id="canvas" class="d-none"></canvas> -->
+	<audio id="snapSound" src="audio/snap.wav" preload="auto"></audio>
 	<img src={image_path} id="input-img" alt="Network input" />
-	<p class="text-4xl italic">Mystery plant</p>
+	<p class="text-4xl italic">{species_name}</p>
 	<div
 		id="button-group"
 		class="absolute sm:relative bottom-0 w-full flex flex-col items-center py-4 px-4"
@@ -59,7 +93,7 @@
 				/></span
 			></Button
 		>
-		<Button
+		<Button on:click={startCamera}
 			><span
 				>Use camera <img
 					src={camera_svg}
@@ -68,7 +102,7 @@
 				/></span
 			></Button
 		>
-		<Button type="primary" on:click={main}
+		<Button type="primary" on:click={makePrediction}
 			><span
 				>Identify <img
 					src={magnifying_svg}

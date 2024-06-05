@@ -143,6 +143,8 @@ export async function main() {
 
     let class_id = class_to_idx[argmax(dataC)]
     console.log(id_to_species[class_id])
+
+    return id_to_species[class_id];
     // console.log(id_to_species["1397613"])
 
     // console.log(dataC[class_to_idx.indexOf('1397613')])

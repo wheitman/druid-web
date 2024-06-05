@@ -32,6 +32,7 @@
 		"jimp": "^0.21.3",
 		"ndarray": "^1.0.19",
 		"ndarray-ops": "^1.2.2",
-		"onnxruntime-web": "^1.18.0"
+		"onnxruntime-web": "^1.18.0",
+		"webcam-easy": "^1.1.1"
 	}
 }
