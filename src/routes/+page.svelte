@@ -9,9 +9,31 @@
 	import camera_svg from "$lib/images/camera.svg";
 	import magnifying_svg from "$lib/images/magnifying-glass.svg";
 
+	let image_ids = [
+		"1391963",
+		"1355990",
+		"1357652",
+		"1358105",
+		"1359483",
+		"1363021",
+		"1364165",
+		"1385937",
+		"1391963",
+		"1397613",
+		"1497667",
+	];
+	let image_path = "";
+
 	onMount(() => {
+		changeImage();
 		main();
 	});
+
+	function changeImage() {
+		console.log("Choosing random image.");
+		let image_id = image_ids[Math.floor(Math.random() * image_ids.length)];
+		image_path = `src/lib/images/plants/${image_id}.jpg`;
+	}
 </script>
 
 <svelte:head>
@@ -22,39 +44,42 @@
 <section>
 	<!-- <img src="src/lib/images/1397613.jpg" id="input-img" alt="Network input" /> -->
 	<!-- <img src="src/lib/images/1497667.jpg" id="input-img" alt="Network input" /> -->
-	<img src="src/lib/images/1359483.jpg" id="input-img" alt="Network input" />
-	<p>Hm... Could it be...</p>
+	<img src={image_path} id="input-img" alt="Network input" />
+	<p class="text-4xl italic">Mystery plant</p>
 	<div
 		id="button-group"
-		class="absolute bottom-0 w-full flex flex-col items-center py-4 px-4"
+		class="absolute sm:relative bottom-0 w-full flex flex-col items-center py-4 px-4"
 	>
-		<Button
-			><span class="text-4xl"
-				>Next image <img
+		<Button on:click={changeImage}
+			><span
+				>Change image <img
 					src={shuffle_svg}
-					class="h-10 inline pl-4"
+					class="h-10 sm:h-6 inline pl-1"
 					alt=""
 				/></span
 			></Button
 		>
 		<Button
-			><span class="text-4xl"
+			><span
 				>Use camera <img
 					src={camera_svg}
-					class="h-10 inline pl-4"
+					class="h-10 sm:h-6 inline pl-1"
 					alt=""
 				/></span
 			></Button
 		>
-		<Button type="primary"
-			><span class="text-4xl font-bold"
+		<Button type="primary" on:click={main}
+			><span
 				>Identify <img
 					src={magnifying_svg}
-					class="h-10 inline pl-4"
+					class="h-10 sm:h-6 inline pl-1"
 					alt=""
 				/></span
 			></Button
 		>
+
+		<canvas id="input-canvas" width="224" height="224" class="hidden"
+		></canvas>
 	</div>
 
 	<!-- <canvas id="input-canvas" width="224" height="224"></canvas> -->

@@ -14,7 +14,7 @@
 	--column-width: 42rem;
 	--column-margin-top: 4rem;
 	font-family: "Ysabeau", sans-serif;
-	font-style: italic;
+	/* font-style: italic; */
 	color: var(--color-text);
 }
 
