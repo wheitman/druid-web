@@ -1,3 +1,5 @@
+![Druid logo](static/druid.svg)
+
 # Druid
 
 A web-based plant analysis toolbox written with SvelteKit, Tailwind CSS, and ONNX Web Runtime.
