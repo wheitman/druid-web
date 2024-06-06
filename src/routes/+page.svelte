@@ -1,11 +1,7 @@
 <script>
-	import Counter from "./Counter.svelte";
-	import welcome from "$lib/images/svelte-welcome.webp";
-	import welcome_fallback from "$lib/images/svelte-welcome.png";
 	import { main } from "./predict";
 	import { onMount } from "svelte";
 	import Button from "$lib/Button.svelte";
-	import CircleButton from "$lib/CircleButton.svelte";
 	import back_svg from "$lib/images/back.svg";
 	import camera_svg from "$lib/images/camera.svg";
 	import circle_svg from "$lib/images/circle.svg";
@@ -238,12 +234,15 @@
 			class="max-h-[40vh] pt-4 pl-12 floating pb-8"
 		/>
 		<p class="text-2xl font-bold text-center" class:hidden={!show_start}>
-			Hi, I'm the Druid.
+			Hi, I'm Druid.
 		</p>
 		<p class="text-lg" class:hidden={!show_start}>
 			I can help you identify 1081 species of plants using on-device AI,
 			and then I find details on Wikipedia for you. I'm learning new
-			species all the time.
+			species all the time. <a
+				href="https://heit.mn/Plant-ID-in-the-browser"
+				class="italic text-green-700">Details and acknowledgements</a
+			>
 		</p>
 		<img
 			class:hidden={webcam_enabled || show_start}
@@ -263,9 +262,11 @@
 			class="text-center font-semibold text-green-600"
 			class:hidden={species_prob < 1 || webcam_enabled || show_start}
 			class:text-green-600={species_prob > 85}
-			class:text-red-600={species_prob < 50}
+			class:text-amber-600={species_prob < 50}
 		>
-			{species_prob}% match
+			{species_prob}% match {#if species_prob < 60}
+				<br />(I probably haven't learned about your plant yet)
+			{/if}
 		</p>
 
 		<p

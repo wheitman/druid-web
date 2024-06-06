@@ -1,4 +1,4 @@
-import * as ort from 'onnxruntime-web'
+import * as ort from 'onnxruntime-web/webgpu'
 import Cropper from 'cropperjs';
 import { onMount } from 'svelte';
 import ndarray from 'ndarray'
