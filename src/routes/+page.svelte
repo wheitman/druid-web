@@ -231,7 +231,7 @@
 			src="druid.svg"
 			alt=""
 			class:hidden={!show_start}
-			class="max-h-[40vh] pt-4 pl-12 floating pb-8"
+			class="max-h-[40vh] pt-4 pl-4 floating pb-8"
 		/>
 		<p class="text-2xl font-bold text-center" class:hidden={!show_start}>
 			Hi, I'm Druid.
