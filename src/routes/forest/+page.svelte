@@ -1,0 +1,29 @@
+<script lang="ts">
+    import { onMount } from "svelte";
+    import Button from "$lib/Button.svelte";
+    import back_svg from "$lib/images/back.svg";
+    import camera_svg from "$lib/images/camera.svg";
+    import circle_svg from "$lib/images/circle.svg";
+    import flip_svg from "$lib/images/flip.svg";
+    import magnifying_svg from "$lib/images/magnifying-glass.svg";
+    import shuffle_svg from "$lib/images/shuffle.svg";
+    import snap_mp3 from "$lib/audio/snap.mp3";
+    import ForestGrid from "$lib/ForestGrid.svelte";
+</script>
+
+<svelte:head>
+    <title>Forest Map</title>
+    <meta
+        name="description"
+        content="Plant identification tool that runs on device"
+    />
+</svelte:head>
+
+<section class="flex flex-col items-center">
+    Hey there!
+
+    <ForestGrid />
+</section>
+
+<style>
+</style>
