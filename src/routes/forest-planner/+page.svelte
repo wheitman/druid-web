@@ -8,7 +8,7 @@
     import magnifying_svg from "$lib/images/magnifying-glass.svg";
     import shuffle_svg from "$lib/images/shuffle.svg";
     import snap_mp3 from "$lib/audio/snap.mp3";
-    import ForestGrid from "$lib/ForestGrid.svelte";
+    import ForestGrid from "$lib/forest_planner/ForestGrid.svelte";
 </script>
 
 <svelte:head>
@@ -20,8 +20,6 @@
 </svelte:head>
 
 <section class="flex flex-col items-center">
-    Hey there!
-
     <ForestGrid />
 </section>
 
