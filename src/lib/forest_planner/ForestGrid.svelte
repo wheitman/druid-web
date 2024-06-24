@@ -8,7 +8,7 @@
     import magnifying_svg from "$lib/images/magnifying-glass.svg";
     import shuffle_svg from "$lib/images/shuffle.svg";
     import snap_mp3 from "$lib/audio/snap.mp3";
-    import { Agent } from "$lib/forest_planner/agent";
+    import { Agent, Action } from "$lib/forest_planner/agent";
     import { Cell, CellType, Location } from "$lib/forest_planner/cell";
 
     let ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement;
@@ -18,12 +18,12 @@
     let tree_color = dark_forest_color;
     let ego_color = "#f88779";
 
-    export let size_px = 400;
+    export let size_px = 360;
     export let cell_size_px = 40;
     let width = Math.floor(size_px / cell_size_px); // cells
     let height = Math.floor(size_px / cell_size_px); // cells
 
-    let ego = new Agent(new Location(0, 0));
+    let ego = new Agent(new Location(0, 0), plantTree);
 
     let cells: Cell[][] = [...Array(height)].map((e) => Array(width));
 
@@ -46,6 +46,14 @@
         }
         ctx.strokeStyle = dark_forest_color;
         ctx.stroke();
+    }
+
+    export function handleActionEvent(action_event: CustomEvent) {
+        console.log(action_event.detail.text);
+        var action: Action =
+            Action[action_event.detail.text as keyof typeof Action];
+        ego.act(action);
+        render();
     }
 
     function render() {
@@ -80,19 +88,19 @@
 
         switch (key_name) {
             case "ArrowUp":
-                ego.pos.y--;
+                ego.act(Action.MOVE_UP);
                 break;
             case "ArrowDown":
-                ego.pos.y++;
+                ego.act(Action.MOVE_DOWN);
                 break;
             case "ArrowLeft":
-                ego.pos.x--;
+                ego.act(Action.MOVE_LEFT);
                 break;
             case "ArrowRight":
-                ego.pos.x++;
+                ego.act(Action.MOVE_RIGHT);
                 break;
             case " ":
-                plantTree();
+                ego.act(Action.PLANT);
                 break;
             default:
                 console.log(`Unknown key press ${key_name}`);

@@ -9,6 +9,9 @@
     import shuffle_svg from "$lib/images/shuffle.svg";
     import snap_mp3 from "$lib/audio/snap.mp3";
     import ForestGrid from "$lib/forest_planner/ForestGrid.svelte";
+    import SocketClient from "$lib/SocketClient.svelte";
+
+    let fgrid: ForestGrid;
 </script>
 
 <svelte:head>
@@ -20,7 +23,10 @@
 </svelte:head>
 
 <section class="flex flex-col items-center">
-    <ForestGrid />
+    <ForestGrid bind:this={fgrid} />
+    <SocketClient
+        on:action={fgrid.handleActionEvent}
+    />
 </section>
 
 <style>
