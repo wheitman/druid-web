@@ -16,14 +16,15 @@
     let dark_forest_color = "#97bd83";
     // let tree_color = "#add19e";
     let tree_color = dark_forest_color;
-    let ego_color = "#f88779";
+    let ego_color = "#0092da";
+    let ego_and_tree_color = "#006bda";
 
     export let size_px = 360;
     export let cell_size_px = 40;
     let width = Math.floor(size_px / cell_size_px); // cells
     let height = Math.floor(size_px / cell_size_px); // cells
 
-    let ego = new Agent(new Location(0, 0), plantTree);
+    let ego = new Agent(getRandomLocation(), plantTree);
 
     let cells: Cell[][] = [...Array(height)].map((e) => Array(width));
 
@@ -31,6 +32,12 @@
         for (let j = 0; j < width; j++) {
             cells[i][j] = new Cell(new Location(j, i), CellType.GRASS);
         }
+    }
+
+    function getRandomLocation(): Location {
+        let x = Math.floor(Math.random() * width);
+        let y = Math.floor(Math.random() * height);
+        return new Location(x, y);
     }
 
     function drawBoard() {
@@ -54,13 +61,33 @@
             Action[action_event.detail.text as keyof typeof Action];
         ego.act(action);
         render();
+        return getState();
+    }
+
+    function getState() {
+        let state: number[] = [];
+
+        cells.forEach((row, i) => {
+            row.forEach((cell: Cell, j) => {
+                state.push(cell.type.valueOf());
+            });
+        });
+
+        if (state[ego.pos.y * width + ego.pos.x] === CellType.TREE)
+            state[ego.pos.y * width + ego.pos.x] =
+                CellType.EGO_AND_TREE.valueOf();
+        else state[ego.pos.y * width + ego.pos.x] = CellType.EGO.valueOf();
+
+        return state;
     }
 
     function render() {
         cells.forEach((row, i) => {
             row.forEach((cell: Cell, j) => {
                 if (i === ego.pos.y && j === ego.pos.x) {
-                    ctx.fillStyle = ego_color;
+                    if (cell.type === CellType.TREE)
+                        ctx.fillStyle = ego_and_tree_color;
+                    else ctx.fillStyle = ego_color;
                 } else if (cell.type === CellType.TREE) {
                     ctx.fillStyle = tree_color;
                 } else {

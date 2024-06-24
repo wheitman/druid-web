@@ -11,7 +11,9 @@
     import ForestGrid from "$lib/forest_planner/ForestGrid.svelte";
     import SocketClient from "$lib/SocketClient.svelte";
 
-    let fgrid: ForestGrid;
+    let forest_grid: ForestGrid;
+    let socket_client: SocketClient;
+    let state: number[];
 </script>
 
 <svelte:head>
@@ -23,9 +25,13 @@
 </svelte:head>
 
 <section class="flex flex-col items-center">
-    <ForestGrid bind:this={fgrid} />
+    <ForestGrid bind:this={forest_grid} />
     <SocketClient
-        on:action={fgrid.handleActionEvent}
+        bind:this={socket_client}
+        on:action={(e) => {
+            state = forest_grid.handleActionEvent(e);
+            socket_client.sendState(state);
+        }}
     />
 </section>
 

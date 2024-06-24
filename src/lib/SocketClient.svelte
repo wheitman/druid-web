@@ -1,6 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher, onMount } from "svelte";
-    import { io } from "socket.io-client";
+    import { io, Socket } from "socket.io-client";
 
     enum ConnectionStatus {
         DISCONNECTED = "Disconnected",
@@ -9,7 +9,7 @@
 
     let connection_status: string = ConnectionStatus.DISCONNECTED;
 
-    let socket;
+    let socket: Socket;
     const dispatch = createEventDispatcher();
 
     function handleAction(action: string) {
@@ -17,6 +17,10 @@
         dispatch("action", {
             text: action,
         });
+    }
+
+    export function sendState(state: number[]) {
+        socket.emit("state", state);
     }
 
     onMount(() => {

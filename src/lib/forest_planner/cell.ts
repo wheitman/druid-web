@@ -1,7 +1,8 @@
 export enum CellType {
     GRASS,
     TREE,
-    EGO
+    EGO,
+    EGO_AND_TREE
 }
 
 export class Cell {
