@@ -18,6 +18,7 @@
     let tree_color = dark_forest_color;
     let ego_color = "#0092da";
     let ego_and_tree_color = "#006bda";
+    let reward: number = 0;
 
     export let size_px = 360;
     export let cell_size_px = 40;
@@ -61,11 +62,13 @@
             Action[action_event.detail.text as keyof typeof Action];
         ego.act(action);
         render();
-        return getState();
+        return getStateAndReward(action);
     }
 
-    function getState() {
+    function getStateAndReward(action: Action) {
         let state: number[] = [];
+        const x = ego.pos.x;
+        const y = ego.pos.y;
 
         cells.forEach((row, i) => {
             row.forEach((cell: Cell, j) => {
@@ -73,12 +76,23 @@
             });
         });
 
-        if (state[ego.pos.y * width + ego.pos.x] === CellType.TREE)
-            state[ego.pos.y * width + ego.pos.x] =
+        if (state[y * width + x] === CellType.TREE)
+            state[y * width + x] =
                 CellType.EGO_AND_TREE.valueOf();
-        else state[ego.pos.y * width + ego.pos.x] = CellType.EGO.valueOf();
+        else state[y * width + x] = CellType.EGO.valueOf();
 
-        return state;
+        /* 
+            Not planting a tree gives 0 reward
+            -2 reward for each tree within 1 square
+            +1 for each tree within 2 squares
+            +1 for planting a tree (base)
+        */
+        reward = 0;
+        if (action === Action.PLANT) {
+            // Check left cells, radius two
+        }
+
+        return { state: state, reward: reward };
     }
 
     function render() {
@@ -155,6 +169,7 @@
 </script>
 
 <canvas id="forest-canvas" width={size_px} height={size_px}></canvas>
+<p>Reward: {reward}</p>
 
 <style>
     /* #forest-canvas {

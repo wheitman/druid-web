@@ -30,6 +30,7 @@
 		"@types/ndarray": "^1.0.14",
 		"@types/ndarray-ops": "^1.2.7",
 		"@types/socket.io": "^3.0.2",
+		"chart.js": "^4.4.3",
 		"cropperjs": "^1.6.2",
 		"jimp": "^0.21.3",
 		"ndarray": "^1.0.19",
@@ -37,6 +38,7 @@
 		"onnxruntime-web": "^1.18.0",
 		"socket.io": "^4.7.5",
 		"socket.io-client": "^4.7.5",
+		"svelte-chartjs": "^3.1.5",
 		"webcam-easy": "^1.1.1"
 	}
 }
