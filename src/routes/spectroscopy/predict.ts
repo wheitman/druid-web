@@ -6,10 +6,38 @@ import ndarray from 'ndarray'
 import class_to_idx from './class_to_idx.json'
 import id_to_species from './plantnet300K_species_id_2_name.json'
 
+import percentiles from "./percentiles.json"
+
 function softmax(arr) {
     return arr.map(function (value, index) {
         return Math.exp(value) / arr.map(function (y /*value*/) { return Math.exp(y) }).reduce(function (a, b) { return a + b })
     })
+}
+
+function getPercentiles(predictions: number[]) {
+    // Search through each row in the percentiles array, at the ith column
+
+    // If the element at the jth row is greater than our prediction
+    // then our percentile is (j*5) 
+
+    let results = [];
+
+    console.log(percentiles)
+
+    for (let i = 0; i < predictions.length; i++) {
+        let pred = predictions[i];
+        for (let j = 0; j < percentiles.length; j++) {
+            console.log(pred)
+            console.log(percentiles[j])
+            if (percentiles[j][i] > pred) {
+                results.push((j) * 5)
+                // console.log(`Percentile is ${j * 5}`)
+                break;
+            }
+        }
+    }
+
+    return results;
 }
 
 // FROM: https://onnxruntime.ai/docs/tutorials/web/classify-images-nextjs-github-template.html
@@ -95,7 +123,7 @@ function argmax(arr: Float32Array) {
 }
 
 
-export async function main() {
+export async function main(input: number[], minmax: any): Promise<number[][]> {
     ort.env.wasm.wasmPaths = "wasm/"
     // create a new session and load the specific model.
     //
@@ -105,10 +133,10 @@ export async function main() {
     const session = await ort.InferenceSession.create('spectroscopy.onnx');
 
 
-    var c = document.getElementById("input-canvas") as HTMLCanvasElement;
-    var ctx = c.getContext("2d");
-    var img = document.getElementById("input-img") as HTMLImageElement;
-    ctx.drawImage(img, 0, 0, 437, 437, 0, 0, 224, 224);
+    // var c = document.getElementById("input-canvas") as HTMLCanvasElement;
+    // var ctx = c.getContext("2d");
+    // var img = document.getElementById("input-img") as HTMLImageElement;
+    // ctx.drawImage(img, 0, 0, 437, 437, 0, 0, 224, 224);
 
     // input_img_element.decode
 
@@ -117,42 +145,79 @@ export async function main() {
     // let ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
     // ctx.drawImage(input_img, 0, 0)
 
-    let image_data = ctx.getImageData(0, 0, 224, 224)
-    console.log(image_data)
+    console.log(input)
 
-    let [input_tensor, alphaArray] = imageDataToTensor(image_data, [1, 3, 224, 224])
+    // let [input_tensor, alphaArray] = imageDataToTensor(image_data, [1, 3, 224, 224])
+    let input_tensor = new ort.Tensor("float32", input, [1, 1051]);
 
-    let pixel_array = Array<number>.from(input_tensor.data).concat(alphaArray)
+    // let pixel_array = Array<number>.from(input_tensor.data).concat(alphaArray)
 
-    for (let i = 0; i < pixel_array.length; i++) {
-        pixel_array[i] *= 255.0
-    }
+    // for (let i = 0; i < pixel_array.length; i++) {
+    //     pixel_array[i] *= 255.0
+    // }
 
-    console.log(Uint8ClampedArray.from(pixel_array))
+    // console.log(Uint8ClampedArray.from(pixel_array))
 
-    let normed_image_data = new ImageData(Uint8ClampedArray.from(pixel_array), 224, 224)
+    // let normed_image_data = new ImageData(Uint8ClampedArray.from(pixel_array), 224, 224)
 
-    ctx?.putImageData(normed_image_data, 0, 0)
+    // ctx?.putImageData(normed_image_data, 0, 0)
     console.log(input_tensor)
 
     // // prepare feeds. use model input names as keys.
-    const feeds = { pixels: input_tensor };
+    const feeds = { "onnx::Unsqueeze_0": input_tensor };
 
     // // feed inputs and run
     const results = await session.run(feeds);
 
-    let probs = softmax(results.class_idx.data)
-    console.log(probs)
+    console.log(results)
+    let logits = results['24'].data
+    console.log(logits)
 
-    // // read from results
-    const dataC = results.class_idx.data;
-    console.log(`data of result tensor 'c': ${probs[argmax(dataC)]}...`);
+    // Denormalize
+    console.log(minmax)
 
-    let class_id = class_to_idx[argmax(dataC)]
-    console.log(id_to_species[class_id])
+    const min: number[] = minmax.min
+    const max: number[] = minmax.max
+    let results_denormed: number[] = [];
+    for (let i = 0; i < min.length; i++) {
+        let denorm_scale = max[i] - min[i]
+        console.log(denorm_scale)
 
-    return [id_to_species[class_id], probs[argmax(dataC)]];
-    // console.log(id_to_species["1397613"])
+        results_denormed.push(logits[i] * denorm_scale + min[i])
+    }
+    console.log(results_denormed)
 
-    // console.log(dataC[class_to_idx.indexOf('1397613')])
+    let total_particles = 0;
+    for (let i = 4; i < 8; i++) {
+        total_particles += results_denormed[i]
+    }
+    console.log(total_particles)
+    let scale_to_100 = 100.0 / total_particles
+
+    for (let i = 4; i < 8; i++) {
+        results_denormed[i] *= scale_to_100
+    }
+
+    total_particles = 0;
+    for (let i = 4; i < 8; i++) {
+        total_particles += results_denormed[i]
+    }
+    console.log(total_particles)
+    console.log(results_denormed)
+
+    let labels = [
+        "oc_usda.c729_w.pct",
+        "n.tot_usda.a623_w.pct",
+        "k.ext_usda.a725_cmolc.kg",
+        "p.ext_usda.a274_mg.kg",
+        "sand.tot_usda.c60_w.pct",
+        "clay.tot_usda.a334_w.pct",
+        "silt.tot_usda.c62_w.pct",
+        "cf_usda.c236_w.pct",
+        "cec_usda.a723_cmolc.kg",
+    ]
+
+    let result_percentiles = getPercentiles(results_denormed)
+
+    return [results_denormed, result_percentiles]
 }

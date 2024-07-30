@@ -1,27 +1,8 @@
-<script>
+<script lang="ts">
 	import { main } from "./predict";
 	import { onMount } from "svelte";
-	import { Line } from "svelte-chartjs";
-	import { data } from "./data";
-	import {
-		Chart as ChartJS,
-		Title,
-		Tooltip,
-		Legend,
-		LineElement,
-		LinearScale,
-		PointElement,
-		CategoryScale,
-	} from "chart.js";
-	ChartJS.register(
-		Title,
-		Tooltip,
-		Legend,
-		LineElement,
-		LinearScale,
-		PointElement,
-		CategoryScale,
-	);
+	import Chart from "chart.js/auto";
+
 	import Button from "$lib/Button.svelte";
 	import back_svg from "$lib/images/back.svg";
 	import camera_svg from "$lib/images/camera.svg";
@@ -30,6 +11,8 @@
 	import magnifying_svg from "$lib/images/magnifying-glass.svg";
 	import shuffle_svg from "$lib/images/shuffle.svg";
 	import snap_mp3 from "$lib/audio/snap.mp3";
+	import scans from "./scans.json";
+	import minmax from "./minmax.json";
 	// import Webcam from 'webcam-easy';
 
 	let image_ids = [
@@ -52,86 +35,146 @@
 
 	let webcam_enabled = false;
 	let show_species_details = false;
-	let species_description = "";
-	let wiki_page_id = 0;
 
 	let prediction_in_progress = false;
 
 	let show_start = true;
+	let selected_scan: Array<number> = [];
 
-	let webcam;
-	let ctx;
+	let organic_carbon = -1.0;
+	let nitrogen = -1.0;
+	let potassium = -1.0;
+	let phosphates = -1.0;
+	let sand = -1.0;
+	let clay = -1.0;
+	let silt = -1.0;
+	let course_fragments = -1.0;
+	let cec = -1.0;
 
-	function startCamera() {
-		const webcamElement = document.getElementById("webcam");
+	let organic_carbon_percentile = -1.0;
+	let nitrogen_percentile = -1.0;
+	let potassium_percentile = -1.0;
+	let phosphates_percentile = -1.0;
+	let sand_percentile = -1.0;
+	let clay_percentile = -1.0;
+	let silt_percentile = -1.0;
+	let course_fragments_percentile = -1.0;
+	let cec_percentile = -1;
+	let hide_results = true;
 
-		show_start = false;
+	let cambridge = "#5b916f";
+	let chart;
+	let doughnut;
+
+	function linspace(
+		startValue: number,
+		stopValue: number,
+		cardinality: number,
+		round: boolean = true,
+	) {
+		var arr = [];
+		var step = (stopValue - startValue) / (cardinality - 1);
+		for (var i = 0; i < cardinality; i++) {
+			let val = startValue + step * i;
+
+			if (round) val = Math.round(val);
+			arr.push(val);
+		}
+		return arr;
 	}
 
-	onMount(() => {});
+	onMount(() => {
+		console.log(scans);
+		const ctx = document.getElementById("canvas");
+		const doughnut_ctx = document.getElementById("doughnut-canvas");
+		selected_scan = scans[Math.floor(Math.random() * scans.length)];
 
-	function goToWikipedia() {
-		window.location.href = `http://en.wikipedia.org/wiki?curid=${wiki_page_id}`;
-	}
+		chart = new Chart(ctx, {
+			type: "line",
+			data: {
+				labels: linspace(400, 2500, 105),
+				datasets: [
+					{
+						label: "Reflectance",
+						data: preprocessChartData(selected_scan),
+						borderWidth: 3,
+						cubicInterpolationMode: "default",
+						pointRadius: 0,
+						pointHoverRadius: 10,
+						pointHitRadius: 10,
+						borderColor: cambridge,
+					},
+				],
+			},
+			options: {
+				scales: {
+					y: {
+						beginAtZero: true,
+						suggestedMax: 70,
+					},
+				},
+				plugins: {
+					legend: {
+						display: false,
+					},
+				},
+			},
+		});
 
-	function changeImage() {
-		show_start = false;
-		console.log("Choosing random image.");
-		let image_id = image_ids[Math.floor(Math.random() * image_ids.length)];
-		image_path = `plants/${image_id}.jpg`;
-		species_name = "Mystery plant";
-		species_prob = 0;
-		show_species_details = false;
-	}
+		doughnut = new Chart(doughnut_ctx, {
+			type: "doughnut",
+			data: {
+				labels: ["Sand", "Clay", "Silt", "Course Fragments"],
+				datasets: [
+					{
+						// label: "My First Dataset",
+						data: [300, 50, 100, 50],
+						backgroundColor: [
+							"#fde68a",
+							"#c2410c",
+							"#e5e7eb",
+							"#78716c",
+						],
+						hoverOffset: 4,
+					},
+				],
+			},
+			options: {},
+		});
+	});
 
 	async function makePrediction() {
-		species_name = "Thinking... Please wait.";
 		prediction_in_progress = true;
 
 		// This is the MOST IMPORTANT LINE:
 		// It actually runs the neural network
-		[species_name, species_prob] = await main();
-		species_prob = Math.floor(species_prob * 100);
-		console.log(`SPECIES PROB: ${species_prob}`);
+		let [results, result_percentiles] = await main(selected_scan, minmax);
 
-		// Simplify to just the genus and species
-		let species_parts = species_name.split(" ");
-		let genus = species_parts[0];
-		let species = species_parts[1];
-		species_name = genus + " " + species;
+		organic_carbon = results[0];
+		nitrogen = results[1];
+		potassium = results[2];
+		phosphates = results[3];
+		sand = results[4];
+		clay = results[5];
+		silt = results[6];
+		course_fragments = results[7];
+		cec = results[8];
 
-		show_species_details = true;
+		// console
+		organic_carbon_percentile = result_percentiles[0];
+		nitrogen_percentile = result_percentiles[1];
+		potassium_percentile = result_percentiles[2];
+		phosphates_percentile = result_percentiles[3];
+		sand_percentile = result_percentiles[4];
+		clay_percentile = result_percentiles[5];
+		silt_percentile = result_percentiles[6];
+		course_fragments_percentile = result_percentiles[7];
+		cec_percentile = result_percentiles[8];
+
+		updateDoughnut(results);
+
 		prediction_in_progress = false;
-	}
-
-	async function searchWikipedia(searchQuery) {
-		const search_endpoint = `https://en.wikipedia.org/w/api.php?action=query&list=search&prop=info&inprop=url&utf8=&format=json&origin=*&srlimit=20&srsearch=${searchQuery}`;
-		// const endpoint = `https://en.wikipedia.org/w/api.php?action=query&list=search&prop=info&inprop=url&utf8=&format=json&origin=*&srlimit=20&srsearch=${searchQuery}`;
-		let response = await fetch(search_endpoint);
-		if (!response.ok) {
-			throw Error(response.statusText);
-		}
-		let json = await response.json();
-
-		console.log(json.query);
-		wiki_page_id = json.query.search[0].pageid;
-
-		const explain_text_endpoint = `https://en.wikipedia.org/w/api.php?format=json&action=query&origin=*&prop=extracts&exintro=1&explaintext=1&pageids=${wiki_page_id}`;
-		response = await fetch(explain_text_endpoint);
-		if (!response.ok) {
-			throw Error(response.statusText);
-		}
-		json = await response.json();
-
-		console.log(json);
-
-		console.log(json.query.pages.length);
-
-		return json.query.pages[wiki_page_id].extract;
-		// if (json.query.pages.length > 0) {
-		// } else {
-		// 	return "No description available.";
-		// }
+		hide_results = false;
 	}
 
 	function hideSpeciesDetails() {
@@ -139,28 +182,35 @@
 		console.log("Species details hidden");
 	}
 
-	function dataURItoBlob(dataURI) {
-		// convert base64 to raw binary data held in a string
-		// doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
-		var byteString = atob(dataURI.split(",")[1]);
+	function round(x: number) {
+		return Math.round((x + Number.EPSILON) * 100) / 100;
+	}
 
-		// separate out the mime component
-		var mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+	function preprocessChartData(scan: number[], downsample_step: number = 10) {
+		let processed_data: number[] = [];
 
-		// write the bytes of the string to an ArrayBuffer
-		var ab = new ArrayBuffer(byteString.length);
-
-		// create a view into the buffer
-		var ia = new Uint8Array(ab);
-
-		// set the bytes of the buffer to the correct values
-		for (var i = 0; i < byteString.length; i++) {
-			ia[i] = byteString.charCodeAt(i);
+		for (let i = 0; i < scan.length; i += downsample_step) {
+			processed_data.push(scan[i] * 100);
 		}
 
-		// write the ArrayBuffer to a blob, and you're done
-		var blob = new Blob([ab], { type: mimeString });
-		return blob;
+		return processed_data;
+	}
+
+	function changeScan() {
+		selected_scan = scans[Math.floor(Math.random() * scans.length)];
+		chart.data.datasets[0].data = preprocessChartData(selected_scan);
+		chart.update();
+		console.log("Reloaded chart");
+	}
+
+	function updateDoughnut(predictions: number[]) {
+		let slices = [];
+		for (let i = 4; i < 8; i++) {
+			slices.push(predictions[i]);
+		}
+
+		doughnut.data.datasets[0].data = slices;
+		doughnut.update();
 	}
 </script>
 
@@ -176,110 +226,68 @@
 	<!-- <img src="src/lib/images/1397613.jpg" id="input-img" alt="Network input" /> -->
 	<!-- <img src="src/lib/images/1497667.jpg" id="input-img" alt="Network input" /> -->
 	<div id="image-box" class="flex flex-col">
-		<video
-			class:hidden={!webcam_enabled}
-			class="rounded-xl"
-			id="webcam"
-			autoplay
-			playsinline
-			width="640"
-			height="640"><track kind="captions" /></video
-		>
-
-		<!-- <canvas id="canvas" class="hidden"></canvas> -->
-		<Line
-			{data}
-			options={{
-				responsive: true,
-				scales: {
-					y: { suggestedMin: 0, suggestedMax: 1 },
-				},
-			}}
-			height={500}
-		/>
-		<audio id="snapSound" src={snap_mp3} preload="auto"></audio>
-
-		<img
-			class:hidden={webcam_enabled || show_start}
-			src={image_path}
-			id="input-img"
-			alt="Network input"
-			class="rounded-xl"
-		/>
-		<p
-			class="text-2xl italic font-semibold text-center"
-			class:hidden={webcam_enabled || show_start}
-			class:animate-pulse={species_name == "Thinking... Please wait."}
-		>
-			{species_name}
-		</p>
-		<p
-			class="text-center font-semibold text-green-600"
-			class:hidden={species_prob < 1 || webcam_enabled || show_start}
-			class:text-green-600={species_prob > 85}
-			class:text-amber-600={species_prob < 50}
-		>
-			{species_prob}% match {#if species_prob < 60}
-				<br />(I probably haven't learned about your plant yet)
-			{/if}
-		</p>
-
-		<p
-			class="text-md"
-			id="species-desc"
-			class:hidden={!show_species_details}
-		>
-			<!-- {species_description} -->
-		</p>
+		<canvas id="canvas" width="480" height="320"></canvas>
 	</div>
 	<div
-		id="button-group"
-		class:hidden={!show_start}
-		class="w-full flex flex-col items-center py-1 px-4"
+		id="results-box"
+		class="w-full grid grid-rows-3 grid-cols-2"
+		class:hidden={hide_results}
 	>
-		<Button on:click={changeImage}
+		<div
+			class="measurement flex flex-col items-center border-2 border-slate-200 rounded-md"
+		>
+			<div>Organic Carbon</div>
+			<div class="text-5xl">{round(organic_carbon)} %</div>
+			<div>{round(organic_carbon_percentile)}th percentile</div>
+		</div>
+
+		<div
+			class="measurement flex flex-col items-center border-2 border-slate-200 rounded-md"
+		>
+			<div>Nitrogen</div>
+			<div class="text-5xl">{round(nitrogen)} %</div>
+			<div>{round(nitrogen_percentile)}th percentile</div>
+		</div>
+
+		<div
+			class="measurement flex flex-col items-center border-2 border-slate-200 rounded-md"
+		>
+			<div>Potassium</div>
+			<div class="text-5xl">{round(potassium)} %</div>
+			<div>{round(potassium_percentile)}th percentile</div>
+		</div>
+
+		<div
+			class="measurement flex flex-col items-center border-2 border-slate-200 rounded-md"
+		>
+			<div>Phosphates</div>
+			<div class="text-5xl">{round(phosphates)} %</div>
+			<div>{round(phosphates_percentile)}th percentile</div>
+		</div>
+
+		<div
+			class="measurement flex flex-col items-center border-2 border-slate-200 rounded-md col-span-2"
+		>
+			<div>CEC</div>
+			<div>
+				<span class="text-5xl">{Math.round(cec)}</span>
+				<span class="text-2xl">cmolc/kg</span>
+			</div>
+			<div>{round(cec_percentile)}th percentile</div>
+		</div>
+		<canvas id="doughnut-canvas" width="480" height="480"></canvas>
+	</div>
+
+	<div class:hidden={hide_results}></div>
+
+	<div id="button-group" class="w-full flex flex-col items-center py-1 px-4">
+		<Button on:click={changeScan}
 			><span
 				><img
 					src={shuffle_svg}
 					class="h-10 sm:h-6 inline pr-4"
 					alt=""
 				/>Load example
-			</span></Button
-		>
-		<Button on:click={startCamera}
-			><span
-				><img
-					src={camera_svg}
-					class="h-10 sm:h-6 inline pr-4"
-					alt=""
-				/>Use camera
-			</span></Button
-		>
-
-		<canvas id="input-canvas" width="224" height="224" class="hidden"
-		></canvas>
-	</div>
-	<div
-		id="button-group"
-		class:hidden={webcam_enabled || show_species_details || show_start}
-		class="w-full flex flex-col items-center py-1 px-4"
-	>
-		<Button on:click={changeImage}
-			><span
-				><img
-					src={shuffle_svg}
-					class="h-10 sm:h-6 inline pr-4"
-					alt=""
-				/>Change image
-			</span></Button
-		>
-		<Button on:click={startCamera}
-			><span
-				><img
-					src={camera_svg}
-					class="h-10 sm:h-6 inline pr-4"
-					alt=""
-				/>Use camera
 			</span></Button
 		>
 		<Button
@@ -291,7 +299,7 @@
 					src={magnifying_svg}
 					class="h-10 sm:h-6 inline pr-4"
 					alt=""
-				/>Identify
+				/>Analyze
 			</span></Button
 		>
 
@@ -323,7 +331,6 @@
 		class:hidden={!show_species_details}
 		class="w-full flex flex-col items-center py-1 px-4"
 	>
-		<Button on:click={goToWikipedia}><span>Go to Wikipedia</span></Button>
 		<Button on:click={hideSpeciesDetails}
 			><span
 				><img
