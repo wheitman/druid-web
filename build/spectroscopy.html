@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<link rel="icon" href="./druid.svg" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<script type="text/javascript" src="https://unpkg.com/webcam-easy/dist/webcam-easy.min.js"></script>
+	
+		<link href="./_app/immutable/assets/0.B8jb_fYC.css" rel="stylesheet">
+		<link href="./_app/immutable/assets/5.D524yWGn.css" rel="stylesheet">
+		<link href="./_app/immutable/assets/Button.CYwMQqqK.css" rel="stylesheet">
+		<link rel="modulepreload" href="./_app/immutable/entry/start.uR5JDHzY.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/entry.D5nXlx57.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/scheduler.BS03pRDD.js">
+		<link rel="modulepreload" href="./_app/immutable/entry/app.DqqcAJyK.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/index.BBPhLOoW.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/0.tmFKBdAX.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/5.dkkZTY_X.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/shuffle.9iSUi5BZ.js"><title>Druid Plant ID</title><!-- HEAD_svelte-v38tx7_START --><meta name="description" content="Plant identification tool that runs on device"><!-- HEAD_svelte-v38tx7_END -->
+</head>
+
+<body data-sveltekit-preload-data="hover">
+	<div style="display: contents">  <div class="app svelte-sojp0v"><main class="sm:rounded-3xl mx-auto sm:my-10 svelte-sojp0v"> <section class="flex flex-col items-center place-content-between min-h-[95vh] svelte-1gbpuew">  <div id="image-box" class="flex flex-col" data-svelte-h="svelte-hxzlp5"><canvas id="canvas" width="480" height="320"></canvas></div> <div id="results-box" class="w-full grid grid-rows-3 grid-cols-2 hidden"><div class="measurement flex flex-col items-center border-2 border-slate-200 rounded-md"><div data-svelte-h="svelte-1vx7uge">Organic Carbon</div> <div class="text-5xl">-1 %</div> <div>-1th percentile</div></div> <div class="measurement flex flex-col items-center border-2 border-slate-200 rounded-md"><div data-svelte-h="svelte-1mjw29u">Nitrogen</div> <div class="text-5xl">-1 %</div> <div>-1th percentile</div></div> <div class="measurement flex flex-col items-center border-2 border-slate-200 rounded-md"><div data-svelte-h="svelte-1jn4atz">Potassium</div> <div class="text-5xl">-1 %</div> <div>-1th percentile</div></div> <div class="measurement flex flex-col items-center border-2 border-slate-200 rounded-md"><div data-svelte-h="svelte-1u95e9">Phosphates</div> <div class="text-5xl">-1 %</div> <div>-1th percentile</div></div> <div class="measurement flex flex-col items-center border-2 border-slate-200 rounded-md col-span-2"><div data-svelte-h="svelte-1jpwsir">CEC</div> <div><span class="text-5xl">-1</span> <span class="text-2xl" data-svelte-h="svelte-iz2t28">cmolc/kg</span></div> <div>-1th percentile</div></div> <canvas id="doughnut-canvas" width="480" height="480"></canvas></div> <div class="hidden"></div> <div id="button-group" class="w-full flex flex-col items-center py-1 px-4"><button class="lined thick w-full border-green-400 text-4xl sm:text-xl m-0 py-1 svelte-1doq2hy"><span data-svelte-h="svelte-c11fg5"><img src="/druid-web/_app/immutable/assets/shuffle.C0OyG-h2.svg" class="h-10 sm:h-6 inline pr-4" alt="">Load example</span> </button> <button class="lined thick w-full border-green-400 text-4xl sm:text-xl m-0 py-1 svelte-1doq2hy  primary"><span data-svelte-h="svelte-1jehc1b"><img src="/druid-web/_app/immutable/assets/magnifying-glass.DXWU6kUc.svg" class="h-10 sm:h-6 inline pr-4" alt="">Analyze</span> </button> <canvas id="input-canvas" width="224" height="224" class="hidden svelte-1gbpuew"></canvas></div> <div id="button-group" class="w-full flex flex-row items-center py-1 px-4 justify-around hidden" data-svelte-h="svelte-ber8gh"> <canvas id="input-canvas" width="224" height="224" class="hidden svelte-1gbpuew"></canvas></div> <div id="button-group" class="w-full flex flex-col items-center py-1 px-4 hidden"><button class="lined thick w-full border-green-400 text-4xl sm:text-xl m-0 py-1 svelte-1doq2hy"><span data-svelte-h="svelte-xlri8c"><img src="/druid-web/_app/immutable/assets/back.CLKGthFs.svg" class="h-8 sm:h-6 inline pr-2" alt="">Search again</span> </button> </div>   </section></main>  </div> 
+			
+			<script>
+				{
+					__sveltekit_1vfogtu = {
+						base: new URL(".", location).pathname.slice(0, -1),
+						assets: "/druid-web"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					const data = [null,null];
+
+					Promise.all([
+						import("./_app/immutable/entry/start.uR5JDHzY.js"),
+						import("./_app/immutable/entry/app.DqqcAJyK.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 5],
+							data,
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+</body>
+
+</html>
