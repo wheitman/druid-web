@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { main } from "./predict";
 	import { onMount } from "svelte";
-	import Button from "$lib/Button.svelte";
 	import back_svg from "$lib/images/back.svg";
 	import camera_svg from "$lib/images/camera.svg";
 	import circle_svg from "$lib/images/circle.svg";
@@ -214,7 +213,9 @@
 <Accordion.Root>
 	<Accordion.Item value="first">
 		<Accordion.Header>
-			<Accordion.Trigger class="text-xl">First</Accordion.Trigger>
+			<Accordion.Trigger class="text-xl text-cambridge-500"
+				>First</Accordion.Trigger
+			>
 		</Accordion.Header>
 		<Accordion.Content>First accordion content</Accordion.Content>
 	</Accordion.Item>
