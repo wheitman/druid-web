@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.app {
+    @apply bg-cambridge-400;
+    height: 100vh;
+    max-width: 50vh;
+    @apply mx-auto;
+}

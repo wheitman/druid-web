@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { main } from "./predict";
 	import { onMount } from "svelte";
 	import Button from "$lib/Button.svelte";
@@ -71,17 +71,15 @@
 
 	onMount(() => {
 		// changeImage();
-
-		const webcamElement = document.getElementById("webcam");
-		const canvasElement = document.getElementById("canvas");
-		const snapSoundElement = document.getElementById("snapSound");
-		webcam = new Webcam(
-			webcamElement,
-			"user",
-			canvasElement,
-			snapSoundElement,
-		);
-
+		// const webcamElement = document.getElementById("webcam");
+		// const canvasElement = document.getElementById("canvas");
+		// const snapSoundElement = document.getElementById("snapSound");
+		// webcam = new Webcam(
+		// 	webcamElement,
+		// 	"user",
+		// 	canvasElement,
+		// 	snapSoundElement,
+		// );
 		// startCamera();
 	});
 
@@ -201,241 +199,38 @@
 		var blob = new Blob([ab], { type: mimeString });
 		return blob;
 	}
+
+	import { Accordion } from "bits-ui";
 </script>
 
 <svelte:head>
-	<title>Druid Plant ID</title>
+	<title>Druid</title>
 	<meta
 		name="description"
 		content="Plant identification tool that runs on device"
 	/>
 </svelte:head>
 
-<section class="flex flex-col items-center place-content-between min-h-[95vh]">
-	<!-- <img src="src/lib/images/1397613.jpg" id="input-img" alt="Network input" /> -->
-	<!-- <img src="src/lib/images/1497667.jpg" id="input-img" alt="Network input" /> -->
-	<div id="image-box" class="flex flex-col">
-		<video
-			class:hidden={!webcam_enabled}
-			class="rounded-xl"
-			id="webcam"
-			autoplay
-			playsinline
-			width="640"
-			height="640"><track kind="captions" /></video
-		>
-
-		<canvas id="canvas" class="hidden"></canvas>
-		<audio id="snapSound" src={snap_mp3} preload="auto"></audio>
-		<img
-			src="druid.svg"
-			alt=""
-			class:hidden={!show_start}
-			class="max-h-[40vh] pt-4 pl-4 floating pb-8"
-		/>
-		<p class="text-2xl font-bold text-center" class:hidden={!show_start}>
-			Hi, I'm Druid.
-		</p>
-		<p class="text-lg" class:hidden={!show_start}>
-			I can help you identify 1081 species of plants using on-device AI,
-			and then I find details on Wikipedia for you. I'm learning new
-			species all the time. <a
-				href="https://heit.mn/Plant-ID-in-the-browser"
-				class="italic text-green-700">Details and acknowledgements</a
-			>
-		</p>
-		<img
-			class:hidden={webcam_enabled || show_start}
-			src={image_path}
-			id="input-img"
-			alt="Network input"
-			class="rounded-xl"
-		/>
-		<p
-			class="text-2xl italic font-semibold text-center"
-			class:hidden={webcam_enabled || show_start}
-			class:animate-pulse={species_name == "Thinking... Please wait."}
-		>
-			{species_name}
-		</p>
-		<p
-			class="text-center font-semibold text-green-600"
-			class:hidden={species_prob < 1 || webcam_enabled || show_start}
-			class:text-green-600={species_prob > 85}
-			class:text-amber-600={species_prob < 50}
-		>
-			{species_prob}% match {#if species_prob < 60}
-				<br />(I probably haven't learned about your plant yet)
-			{/if}
-		</p>
-
-		<p
-			class="text-md"
-			id="species-desc"
-			class:hidden={!show_species_details}
-		>
-			<!-- {species_description} -->
-		</p>
-	</div>
-	<div
-		id="button-group"
-		class:hidden={!show_start}
-		class="w-full flex flex-col items-center py-1 px-4"
-	>
-		<Button on:click={changeImage}
-			><span
-				><img
-					src={shuffle_svg}
-					class="h-10 sm:h-6 inline pr-4"
-					alt=""
-				/>Load example
-			</span></Button
-		>
-		<Button on:click={startCamera}
-			><span
-				><img
-					src={camera_svg}
-					class="h-10 sm:h-6 inline pr-4"
-					alt=""
-				/>Use camera
-			</span></Button
-		>
-
-		<canvas id="input-canvas" width="224" height="224" class="hidden"
-		></canvas>
-	</div>
-	<div
-		id="button-group"
-		class:hidden={webcam_enabled || show_species_details || show_start}
-		class="w-full flex flex-col items-center py-1 px-4"
-	>
-		<Button on:click={changeImage}
-			><span
-				><img
-					src={shuffle_svg}
-					class="h-10 sm:h-6 inline pr-4"
-					alt=""
-				/>Change image
-			</span></Button
-		>
-		<Button on:click={startCamera}
-			><span
-				><img
-					src={camera_svg}
-					class="h-10 sm:h-6 inline pr-4"
-					alt=""
-				/>Use camera
-			</span></Button
-		>
-		<Button
-			type="primary"
-			on:click={makePrediction}
-			loading={prediction_in_progress}
-			><span
-				><img
-					src={magnifying_svg}
-					class="h-10 sm:h-6 inline pr-4"
-					alt=""
-				/>Identify
-			</span></Button
-		>
-
-		<canvas id="input-canvas" width="224" height="224" class="hidden"
-		></canvas>
-	</div>
-
-	<div
-		id="button-group"
-		class:hidden={!webcam_enabled || show_start}
-		class="w-full flex flex-row items-center py-1 px-4 justify-around"
-	>
-		<button class="w-16 h-16" on:click={stopCamera}>
-			<img src={back_svg} alt="" />
-		</button>
-		<button class="w-16 h-16" on:click={takePicture}>
-			<img src={circle_svg} alt="" />
-		</button>
-		<button class="w-16 h-16" on:click={flipCamera}>
-			<img src={flip_svg} alt="" />
-		</button>
-
-		<canvas id="input-canvas" width="224" height="224" class="hidden"
-		></canvas>
-	</div>
-
-	<div
-		id="button-group"
-		class:hidden={!show_species_details}
-		class="w-full flex flex-col items-center py-1 px-4"
-	>
-		<Button on:click={goToWikipedia}><span>Go to Wikipedia</span></Button>
-		<Button on:click={hideSpeciesDetails}
-			><span
-				><img
-					src={back_svg}
-					class="h-8 sm:h-6 inline pr-2"
-					alt=""
-				/>Search again
-			</span></Button
-		>
-		<!-- <button class="w-16 h-16" on:click={hideSpeciesDetails}>
-			<img src={back_svg} alt="" />
-		</button> -->
-	</div>
-	<!-- <canvas id="input-canvas" width="224" height="224"></canvas> -->
-	<!-- <Counter /> -->
-</section>
+<Accordion.Root>
+	<Accordion.Item value="first">
+		<Accordion.Header>
+			<Accordion.Trigger class="text-xl">First</Accordion.Trigger>
+		</Accordion.Header>
+		<Accordion.Content>First accordion content</Accordion.Content>
+	</Accordion.Item>
+	<Accordion.Item value="second">
+		<Accordion.Header>
+			<Accordion.Trigger>Second</Accordion.Trigger>
+		</Accordion.Header>
+		<Accordion.Content>Second accordion content</Accordion.Content>
+	</Accordion.Item>
+	<Accordion.Item value="third">
+		<Accordion.Header>
+			<Accordion.Trigger>Third</Accordion.Trigger>
+		</Accordion.Header>
+		<Accordion.Content>Third accordion content</Accordion.Content>
+	</Accordion.Item>
+</Accordion.Root>
 
 <style>
-	section {
-	}
-
-	#input-img {
-	}
-
-	h1 {
-		width: 100%;
-	}
-
-	.welcome {
-		display: block;
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
-
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		display: block;
-	}
-
-	#input-canvas {
-		width: 224px;
-		height: 224px;
-	}
-
-	.floating {
-		animation-name: floating;
-		animation-duration: 6s;
-		animation-iteration-count: infinite;
-		animation-timing-function: ease-in-out;
-		margin-left: 30px;
-		margin-top: 5px;
-	}
-
-	@keyframes floating {
-		0% {
-			transform: translate(0, 0px);
-		}
-		50% {
-			transform: translate(0, 15px);
-		}
-		100% {
-			transform: translate(0, -0px);
-		}
-	}
 </style>
