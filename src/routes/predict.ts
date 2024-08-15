@@ -95,7 +95,7 @@ function argmax(arr: Float32Array) {
 }
 
 
-export async function main() {
+export async function startPlantnetPrediction() {
     ort.env.wasm.wasmPaths = "wasm/"
     // create a new session and load the specific model.
     //
@@ -108,6 +108,15 @@ export async function main() {
     var c = document.getElementById("input-canvas") as HTMLCanvasElement;
     var ctx = c.getContext("2d");
     var img = document.getElementById("input-img") as HTMLImageElement;
+
+    let numSpecimenDivs = document.getElementsByClassName("specimen-div").length;
+    var specimenDiv = document.getElementsByClassName("specimen-div")[numSpecimenDivs - 1] as HTMLDivElement;
+    let style = specimenDiv.currentStyle || window.getComputedStyle(specimenDiv, false);
+    let bi = style.backgroundImage.slice(4, -1).replace(/"/g, "");
+    img.src = bi;
+
+    console.log(bi);
+
     ctx.drawImage(img, 0, 0, 437, 437, 0, 0, 224, 224);
 
     // input_img_element.decode

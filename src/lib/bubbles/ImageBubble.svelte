@@ -1,5 +1,7 @@
 <script lang="ts">
     import { colors, primary } from "$lib/palettes";
+    import { fade, crossfade, fly } from "svelte/transition";
+
     export let isResponse: boolean = false;
 
     let bgColor: string;
@@ -13,7 +15,7 @@
         else textColor = colorString;
     });
 
-    let imageUrl = "plants/1357652.jpg";
+    export let imageUrl;
 
     // if (isResponse) borderColor = colorString;
     // else borderColor = "#ffffff";
@@ -29,10 +31,11 @@
 </div> -->
 
 <div
-    class="rounded-xl m-4 bg-clip-border h-48"
+    class="rounded-xl m-4 bg-clip-border h-48 specimen-div"
     class:mr-8={isResponse}
     class:ml-8={!isResponse}
     style="background-color: {bgColor}; border-color: {$primary}; border-width: 0.15rem; color: {textColor}; background-image: url({imageUrl}); background-size: cover; background-position: center center;  "
+    transition:fly={{ delay: 0, duration: 500 }}
 ></div>
 
 <style lang="postcss">

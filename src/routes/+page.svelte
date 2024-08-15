@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { main } from "./predict";
+	import { startPlantnetPrediction } from "./predict";
 	import { onMount } from "svelte";
 	import back_svg from "$lib/images/back.svg";
 	import camera_svg from "$lib/images/camera.svg";
@@ -102,7 +102,7 @@
 
 		// This is the MOST IMPORTANT LINE:
 		// It actually runs the neural network
-		[species_name, species_prob] = await main();
+		[species_name, species_prob] = await startPlantnetPrediction();
 		species_prob = Math.floor(species_prob * 100);
 		console.log(`SPECIES PROB: ${species_prob}`);
 
