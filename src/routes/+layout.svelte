@@ -1,6 +1,18 @@
 <script>
+	import { onNavigate } from "$app/navigation";
 	import "../app.css";
 	import Navbar from "$lib/Navbar.svelte";
+
+	onNavigate((navigation) => {
+		if (!document.startViewTransition) return;
+
+		return new Promise((resolve) => {
+			document.startViewTransition(async () => {
+				resolve();
+				await navigation.complete;
+			});
+		});
+	});
 </script>
 
 <div class="app">

@@ -3,7 +3,6 @@
     import "../app.css";
     import { colors, primary } from "$lib/palettes";
     import { onMount } from "svelte";
-    import { goto } from "$app/navigation";
 
     let currentColor = colors.cambridge;
     primary.subscribe((value) => {
@@ -25,32 +24,34 @@
     const pages = [
         {
             name: "Plant Analysis",
-            path: "/plant-analysis",
+            path: "plant-analysis",
             icon: "yard",
             color: colors.cambridge,
         },
         {
             name: "Soil Analysis",
-            path: "/soil-analysis",
-            icon: "landscape_2",
+            path: "soil-analysis",
+            icon: "yard",
             color: colors.clay,
         },
     ];
 
     let pageIndex = 0; // Start on the first page
-    let baseurl = "/druid-web";
 
     function nextPage() {
         pageIndex++;
         wrapPageIndex();
+        console.log(
+            `Page is now ${pageIndex}. Color is ${pages[pageIndex].color}. Text is now text-${pages[pageIndex].color}-300`,
+        );
 
-        goto(baseurl + pages[pageIndex].path);
+        primary.set(pages[pageIndex].color);
     }
 
     function previousPage() {
         pageIndex--;
         wrapPageIndex();
-        goto(baseurl + pages[pageIndex].path);
+        console.log(`Page is now ${pageIndex}`);
     }
 
     function wrapPageIndex() {
@@ -64,12 +65,12 @@
 
 <div
     class="h-16 drop-shadow-lg bottom-0 absolute w-full flex flex-row items-center justify-between gap-x-2"
-    style="background-color: {$primary['100']};"
+    style="background-color: {$primary['50']};"
 >
     <Button.Root
         class="inline-flex h-full items-center justify-center rounded-input bg-dark
 px-[21px] text-[15px] font-semibold text-background shadow-mini duration-0"
-        on:click={previousPage}
+        on:click={nextPage}
     >
         <span class="material-symbols-outlined"> chevron_left </span>
     </Button.Root>
