@@ -2,6 +2,13 @@
     import { colors, primary } from "$lib/palettes";
     import { onMount } from "svelte";
     import ChatBubble from "$lib/ChatBubble.svelte";
+    import ImageBubble from "$lib/bubbles/ImageBubble.svelte";
+
+    let bubbles = [
+        [ImageBubble, {}],
+        [ChatBubble, { isResponse: true }],
+        [ChatBubble, {}],
+    ];
 
     onMount(() => {
         primary.set(colors.cambridge);
@@ -16,8 +23,11 @@
     />
 </svelte:head>
 
-<ChatBubble isResponse />
-<ChatBubble />
+{#each bubbles as [bubble, props]}
+    <svelte:component this={bubble} {...props}>
+        (Slotted content)
+    </svelte:component>
+{/each}
 
 <style>
 </style>
