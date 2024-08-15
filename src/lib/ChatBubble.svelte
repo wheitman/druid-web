@@ -1,93 +1,28 @@
 <script lang="ts">
-    import { Button } from "bits-ui";
-    import "../app.css";
     import { colors, primary } from "$lib/palettes";
-    import { onMount } from "svelte";
+    export let isResponse: boolean = false;
 
-    let currentColor = colors.cambridge;
-    primary.subscribe((value) => {
-        currentColor = value;
-    });
+    let colorString = $primary[500];
 
-    function textColor(level: number): string {
-        let color = pages[pageIndex].color;
+    let bgColor: string;
+    let textColor: string;
 
-        return `text-${color}-${level}`;
-    }
+    if (isResponse) bgColor = colorString;
+    else bgColor = "#ffffff";
+    if (isResponse) textColor = "#ffffff";
+    else textColor = colorString;
 
-    function backgroundColor(level: number): string {
-        let color = pages[pageIndex].color;
-
-        return `bg-${color}-${level}`;
-    }
-
-    const pages = [
-        {
-            name: "Plant Analysis",
-            path: "plant-analysis",
-            icon: "yard",
-            color: colors.cambridge,
-        },
-        {
-            name: "Soil Analysis",
-            path: "soil-analysis",
-            icon: "yard",
-            color: colors.clay,
-        },
-    ];
-
-    let pageIndex = 0; // Start on the first page
-
-    function nextPage() {
-        pageIndex++;
-        wrapPageIndex();
-        console.log(
-            `Page is now ${pageIndex}. Color is ${pages[pageIndex].color}. Text is now text-${pages[pageIndex].color}-300`,
-        );
-
-        primary.set(pages[pageIndex].color);
-    }
-
-    function previousPage() {
-        pageIndex--;
-        wrapPageIndex();
-        console.log(`Page is now ${pageIndex}`);
-    }
-
-    function wrapPageIndex() {
-        if (pageIndex < 0) {
-            pageIndex += pages.length;
-        } else if (pageIndex >= pages.length) {
-            pageIndex -= pages.length;
-        }
-    }
+    // if (isResponse) borderColor = colorString;
+    // else borderColor = "#ffffff";
 </script>
 
 <div
-    class="h-16 drop-shadow-lg bottom-0 absolute w-full flex flex-row items-center justify-between gap-x-2"
-    style="background-color: {$primary['50']};"
+    class="rounded-xl m-4 p-4"
+    class:mr-8={isResponse}
+    class:ml-8={!isResponse}
+    style="background-color: {bgColor}; border-color: {colorString}; border-width: 2px; color: {textColor};"
 >
-    <Button.Root
-        class="inline-flex h-full items-center justify-center rounded-input bg-dark
-px-[21px] text-[15px] font-semibold text-background shadow-mini duration-0"
-        on:click={nextPage}
-    >
-        <span class="material-symbols-outlined"> chevron_left </span>
-    </Button.Root>
-    <span class="material-symbols-outlined {textColor(400)}">
-        {pages[pageIndex].icon}
-    </span>
-    <p class="text-xl {textColor(600)}">
-        {pages[pageIndex].name}
-    </p>
-    <Button.Root
-        class="inline-flex h-full items-center justify-center rounded-input bg-dark
-  px-[21px] text-[15px] font-semibold text-background shadow-mini
-  hover:{backgroundColor(100)}  active:{backgroundColor(200)} duration-0"
-        on:click={nextPage}
-    >
-        <span class="material-symbols-outlined"> chevron_right </span>
-    </Button.Root>
+    Ah, lovely specimen. Shall I identify it for you?
 </div>
 
 <style lang="postcss">

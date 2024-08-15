@@ -1,6 +1,7 @@
 <script lang="ts">
     import { colors, primary } from "$lib/palettes";
     import { onMount } from "svelte";
+    import ChatBubble from "$lib/ChatBubble.svelte";
 
     onMount(() => {
         primary.set(colors.cambridge);
@@ -15,7 +16,8 @@
     />
 </svelte:head>
 
-Plant Analysis :P
+<ChatBubble isResponse />
+<ChatBubble />
 
 <style>
 </style>
