@@ -114,6 +114,7 @@ export async function startPlantnetPrediction() {
     let style = specimenDiv.currentStyle || window.getComputedStyle(specimenDiv, false);
     let bi = style.backgroundImage.slice(4, -1).replace(/"/g, "");
     img.src = bi;
+    img.crossOrigin = "Anonymous";
 
     console.log(bi);
 

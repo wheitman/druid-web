@@ -2,7 +2,7 @@
     import { colors, primary } from "$lib/palettes";
     import { onMount } from "svelte";
     import TextBubble from "$lib/bubbles/TextBubble.svelte";
-    import TextInputBubble from "$lib/bubbles/TextInputBubble.svelte";
+    import UrlInputBubble from "$lib/bubbles/UrlInputBubble.svelte";
     import ImageBubble from "$lib/bubbles/ImageBubble.svelte";
     import ChoiceBubble from "$lib/bubbles/ChoiceBubble.svelte";
 
@@ -63,7 +63,7 @@
                         {
                             text: "From URL",
                             icon: "link",
-                            cb: getSpecimenFromUrl,
+                            cb: requestImageUrl,
                         },
                         // { text: "Use camera", icon: "photo_camera" },
                     ],
@@ -183,7 +183,7 @@
                         {
                             text: "Different example",
                             icon: "shuffle",
-                            cb: loadExampleSpecimen,
+                            cb: addSpecimenPromptBubble,
                         },
                         // { text: "Use camera", icon: "photo_camera" },
                     ],
@@ -191,15 +191,67 @@
             ],
         ];
     }
-    function getSpecimenFromUrl() {
+
+    function loadSpecimenFromUrl(url: string) {
+        console.log(`loading image from ${url}`);
+
+        bubbles = [...bubbles, [ImageBubble, { imageUrl: url }]];
+        bubbles = [
+            ...bubbles,
+            [
+                TextBubble,
+                {
+                    isResponse: true,
+                    text: "Ah, lovely specimem. Shall I identify it for you?",
+                },
+            ],
+        ];
+        bubbles = [
+            ...bubbles,
+            [
+                ChoiceBubble,
+                {
+                    skipTransitionDelay: false,
+                    choices: [
+                        {
+                            text: "Identify",
+                            icon: "search",
+                            cb: startPlantID,
+                        },
+                        {
+                            text: "Different example",
+                            icon: "shuffle",
+                            cb: addSpecimenPromptBubble,
+                        },
+                        // { text: "Use camera", icon: "photo_camera" },
+                    ],
+                },
+            ],
+        ];
+    }
+
+    function requestImageUrl() {
         console.log("loading image");
+
+        addTextBubble(
+            "Careful, my child: I likely haven't studied plants from the Great Unknown-- ahem, the Internet. I will warn you if I see something new to me.",
+            true,
+            true,
+        );
 
         const randomChoice =
             examplePlants[Math.floor(Math.random() * examplePlants.length)];
 
         bubbles = [
             ...bubbles,
-            [TextInputBubble, { skipTransitionDelay: true }],
+            [
+                UrlInputBubble,
+                {
+                    skipTransitionDelay: false,
+                    icon: "send",
+                    cb: loadSpecimenFromUrl,
+                },
+            ],
         ];
         // bubbles = [
         //     ...bubbles,
