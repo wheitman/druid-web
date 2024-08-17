@@ -108,15 +108,18 @@ export async function startPlantnetPrediction() {
     var c = document.getElementById("input-canvas") as HTMLCanvasElement;
     var ctx = c.getContext("2d");
     var img = document.getElementById("input-img") as HTMLImageElement;
+    // img.crossOrigin = "Anonymous";
 
     let numSpecimenDivs = document.getElementsByClassName("specimen-div").length;
     var specimenDiv = document.getElementsByClassName("specimen-div")[numSpecimenDivs - 1] as HTMLDivElement;
     let style = specimenDiv.currentStyle || window.getComputedStyle(specimenDiv, false);
     let bi = style.backgroundImage.slice(4, -1).replace(/"/g, "");
+    // img.crossOrigin = "Anonymous";
     img.src = bi;
-    img.crossOrigin = "Anonymous";
 
     console.log(bi);
+
+
 
     ctx.drawImage(img, 0, 0, 437, 437, 0, 0, 224, 224);
 
@@ -126,7 +129,7 @@ export async function startPlantnetPrediction() {
     // input_img.src = 'src/lib/images/1397613.jpg';
     // let ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
     // ctx.drawImage(input_img, 0, 0)
-
+    // img.crossOrigin = "Anonymous";
     let image_data = ctx.getImageData(0, 0, 224, 224)
     console.log(image_data)
 
