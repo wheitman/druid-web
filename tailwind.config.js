@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+
 export default {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
@@ -30,6 +31,9 @@ export default {
         '950': '#381910',
       },
 
+    },
+    fontFamily: {
+      'mono': ["Noto Sans Mono", "monospace"]
     },
     extend: {
       dropShadow: {
