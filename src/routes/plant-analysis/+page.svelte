@@ -9,7 +9,7 @@
 
     import { startPlantnetPrediction } from "../predict";
 
-    let bubbles: any = [
+    let bubbles: any[] = [
         // [ImageBubble, {}],
         // [TextBubble, { isResponse: true }],
         // [TextBubble, {}],
@@ -93,30 +93,41 @@
         ];
     }
 
+    function removeLastBubble() {
+        bubbles.pop();
+    }
+
     async function startPlantID() {
         console.log("Identifying plant!");
         addTextBubble("Thinking...", true, true);
 
         [predictedSpecies, prob] = await startPlantnetPrediction();
+        removeLastBubble();
 
         prob *= 100;
 
         let confidenceRemark;
+        let confidencePremark = "This is ";
+
+        if (prob < 50) {
+            confidencePremark =
+                "I don't believe I've seen this species before. My best guess is ";
+        }
 
         if (prob > 99) {
             confidenceRemark = ", no doubt! ";
         } else if (prob > 80) {
             confidenceRemark = ", I'm almost certain. ";
         } else if (prob > 50) {
-            confidenceRemark = ", I'm mostly sure. ";
+            confidenceRemark = ", I believe. ";
         } else if (prob > 25) {
-            confidenceRemark = ", I think. Or is it? ";
+            confidenceRemark = ". ";
         } else {
             confidenceRemark =
                 ", but that's just a wild guess. Frankly, I have no idea what this is. ";
         }
 
-        let response: string = `This is ${predictedSpecies}, ${confidenceRemark} `;
+        let response: string = `${confidencePremark}${predictedSpecies}, ${confidenceRemark} `;
 
         if (prob <= 25) {
             response =
@@ -135,7 +146,7 @@
         if (prob > 99) {
             confidenceRemark = "This is one of my favorites.";
         } else if (prob > 85) {
-            confidenceRemark = "So, pretty confident.";
+            confidenceRemark = "Pretty confident, my child.";
         } else if (prob > 50) {
             confidenceRemark = "You might want to check this.";
         } else if (prob > 30) {

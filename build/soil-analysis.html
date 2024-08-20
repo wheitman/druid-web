@@ -26,15 +26,13 @@
 		<link rel="modulepreload" href="./_app/immutable/nodes/0.Bzm7vzWg.js">
 		<link rel="modulepreload" href="./_app/immutable/chunks/create.Dt841dPM.js">
 		<link rel="modulepreload" href="./_app/immutable/chunks/palettes.OYofw-Cy.js">
-		<link rel="modulepreload" href="./_app/immutable/nodes/3.BkJo6Gdt.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/cropper.esm.DeR_ZwMl.js"><title>Druid</title><!-- HEAD_svelte-1dvrf4b_START --><meta name="description" content="Plant identification tool that runs on device"><!-- HEAD_svelte-1dvrf4b_END -->
+		<link rel="modulepreload" href="./_app/immutable/nodes/5.Bjx8IRu9.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/TextBubble.D9Gj7bMX.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/cropper.esm.DeR_ZwMl.js"><title>Plant Analysis - Druid</title><!-- HEAD_svelte-1dkhnc4_START --><meta name="description" content="Plant identification tool that runs on device"><!-- HEAD_svelte-1dkhnc4_END -->
 </head>
 
 <body data-sveltekit-preload-data="hover">
-	<div style="display: contents">  <div class="app"><main> <div class="h-[98vh] w-full" style="background-color: #f3f8fa;"><img src="res/druid-new.svg" alt="A wizard with a green robe, a green pointy hat with a leaf pattern, and a big white beard." class="h-96 mx-auto pt-16"> <p class="mx-auto p-8 text-center" data-svelte-h="svelte-1vtv21p">I am your virtual companion to the natural world. I am trained in the
-		arts of <strong>plant identification</strong> and
-		<strong>soil analysis</strong>, though I am always learning new forms of
-		magic.</p></div>  <div class="h-16 drop-shadow-lg bottom-0 absolute w-full flex flex-row items-center justify-between gap-x-2" style="background-color: #e9f2f6;"> <button tabindex="0" class="inline-flex h-full items-center justify-center rounded-input bg-dark
+	<div style="display: contents">  <div class="app"><main> <div class="overflow-auto max-h-[90vh]" id="chat-div"> <div id="anchor"></div></div> <canvas id="input-canvas" width="224" height="224" class="hidden"></canvas> <canvas id="webcam-canvas" width="224" height="224" class="hidden"></canvas> <img id="input-img" width="224" height="224" alt="For neural network." class="hidden"> <div class="h-16 drop-shadow-lg bottom-0 absolute w-full flex flex-row items-center justify-between gap-x-2" style="background-color: #e9f2f6;"> <button tabindex="0" class="inline-flex h-full items-center justify-center rounded-input bg-dark
 px-[21px] text-[15px] font-semibold text-background shadow-mini duration-0" data-button-root=""><span class="material-symbols-outlined" data-svelte-h="svelte-pii7ls">chevron_left</span></button> <span class="material-symbols-outlined text-[object Object]-400">cottage</span> <p class="text-xl text-[object Object]-600">Home</p>  <button tabindex="0" class="inline-flex h-full items-center justify-center rounded-input bg-dark
   px-[21px] text-[15px] font-semibold text-background shadow-mini
   hover:bg-[object Object]-100  active:bg-[object Object]-200 duration-0" data-button-root=""><span class="material-symbols-outlined" data-svelte-h="svelte-4c8hbt">chevron_right</span></button> </div></main>  <div class="hidden" data-svelte-h="svelte-1awf2eh"><div class="bg-teal-300"></div> <div class="bg-red-300"></div> <div class="bg-yellow-300"></div> <div class="bg-green-300"></div> <div class="bg-blue-300"></div> <div class="bg-purple-300"></div> <div class="bg-orange-300"></div> <div class="bg-slate-300"></div> <div class="bg-slate-400"></div></div> </div> 
@@ -55,7 +53,7 @@ px-[21px] text-[15px] font-semibold text-background shadow-mini duration-0" data
 						import("./_app/immutable/entry/app.D0Md73WG.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
-							node_ids: [0, 3],
+							node_ids: [0, 5],
 							data,
 							form: null,
 							error: null

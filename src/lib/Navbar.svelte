@@ -5,7 +5,7 @@
     import { onMount } from "svelte";
     import { goto } from "$app/navigation";
 
-    let currentColor = colors.cambridge;
+    let currentColor = colors.cove;
     primary.subscribe((value) => {
         currentColor = value;
     });
@@ -23,6 +23,12 @@
     }
 
     const pages = [
+        {
+            name: "Home",
+            path: "/",
+            icon: "cottage",
+            color: colors.cove,
+        },
         {
             name: "Plant Analysis",
             path: "/plant-analysis",

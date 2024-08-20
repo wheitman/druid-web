@@ -509,7 +509,8 @@ Soil type:        ${getSoilType(sand, clay)}
             true,
             true,
         );
-        addSpecimenPromptBubble();
+        addScanResultBubble();
+        // addSpecimenPromptBubble();
     });
 </script>
 

@@ -26,7 +26,21 @@ export let colors = {
         '800': '#713d22',
         '900': '#613422',
         '950': '#381910',
+    }, 'cove': {
+        '50': '#f3f8fa',
+        '100': '#e9f2f6',
+        '200': '#d8e6ed',
+        '300': '#bfd5e2',
+        '400': '#a5bfd4',
+        '500': '#8ea9c6',
+        '600': '#7690b5',
+        '700': '#647b9e',
+        '800': '#536680',
+        '900': '#475568',
+        '950': '#29303d',
     },
+
+
 };
 
-export let primary = writable(colors.cambridge)
+export let primary = writable(colors.cove)
