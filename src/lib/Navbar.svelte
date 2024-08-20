@@ -69,7 +69,7 @@
 </script>
 
 <div
-    class="h-16 drop-shadow-lg bottom-0 absolute w-full flex flex-row items-center justify-between gap-x-2"
+    class="h-16 drop-shadow-lg bottom-0 fixed w-full mx-auto max-w-[50vh] flex flex-row items-center justify-between gap-x-2"
     style="background-color: {$primary['100']};"
 >
     <Button.Root
