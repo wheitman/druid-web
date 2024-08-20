@@ -8,7 +8,7 @@
 	import magnifying_svg from "$lib/images/magnifying-glass.svg";
 	import shuffle_svg from "$lib/images/shuffle.svg";
 	import snap_mp3 from "$lib/audio/snap.mp3";
-	import { fade, slide } from "svelte/transition";
+	import { fade, slide, draw } from "svelte/transition";
 	import { colors, primary } from "$lib/palettes";
 	import showdown from "showdown";
 	import { Dialog, Separator, Label } from "bits-ui";
@@ -45,6 +45,7 @@
 </svelte:head>
 
 <div class="h-[98vh] w-full" style="">
+	
 	<img
 		src="res/druid-new.svg"
 		alt="A wizard with a green robe, a green pointy hat with a leaf pattern, and a big white beard."

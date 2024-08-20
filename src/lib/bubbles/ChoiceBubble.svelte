@@ -45,7 +45,7 @@
             class="rounded-xl ml-2 p-4 flex flex-col"
             class:mr-8={isResponse}
             class:ml-8={!isResponse}
-            style="background-color: {bgColor}; border-color: {$primary}; border-width: 0.15rem; color: {textColor};"
+            style="background-color: {bgColor}; border-color: {$primary["400"]}; border-width: 0.15rem; color: {textColor};"
         >
             {#each choices as choice}
                 <button

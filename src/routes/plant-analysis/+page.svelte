@@ -2,6 +2,7 @@
     import { colors, primary, pageIndex } from "$lib/palettes";
     import { onMount } from "svelte";
     import TextBubble from "$lib/bubbles/TextBubble.svelte";
+    import Disclosure from "$lib/bubbles/Disclosure.svelte";
     import UrlInputBubble from "$lib/bubbles/UrlInputBubble.svelte";
     import ImageBubble from "$lib/bubbles/ImageBubble.svelte";
     import ChoiceBubble from "$lib/bubbles/ChoiceBubble.svelte";
@@ -62,6 +63,7 @@
                 },
             ],
         ];
+        scrollToBottom();
     }
 
     function addSpecimenPromptBubble() {
@@ -415,6 +417,20 @@
         // ];
     }
 
+    function addDisclosure(text: string, symbol: string, immediate = false) {
+        bubbles = [
+            ...bubbles,
+            [
+                Disclosure,
+                {
+                    text: text,
+                    symbol: symbol,
+                    skipTransitionDelay: immediate,
+                },
+            ],
+        ];
+    }
+
     onMount(() => {
         primary.set(colors.cambridge);
         pageIndex.set(1);
@@ -424,6 +440,8 @@
             true,
             true,
         );
+        addDisclosure("Conversation never leaves your device.", "lock", false);
+
         addSpecimenPromptBubble();
     });
 </script>

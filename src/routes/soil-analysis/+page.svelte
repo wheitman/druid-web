@@ -2,6 +2,7 @@
     import { colors, primary, pageIndex } from "$lib/palettes";
     import { onMount } from "svelte";
     import TextBubble from "$lib/bubbles/TextBubble.svelte";
+    import Disclosure from "$lib/bubbles/Disclosure.svelte";
     import ReportBubble from "$lib/bubbles/ReportBubble.svelte";
     import UrlInputBubble from "$lib/bubbles/UrlInputBubble.svelte";
     import ChartBubble from "$lib/bubbles/ChartBubble.svelte";
@@ -18,6 +19,20 @@
         // [TextBubble, { isResponse: true }],
         // [TextBubble, {}],
     ];
+
+    function scrollToBottom() {
+        let nestedElement = document.getElementById("chat-div");
+        nestedElement.scrollTo(0, nestedElement.scrollHeight);
+        console.log("Done scrolling, first.");
+
+        setTimeout(() => {
+            nestedElement.scrollTo({
+                top: nestedElement.scrollHeight,
+                behavior: "smooth",
+            });
+            console.log("Done scrolling.");
+        }, 200);
+    }
 
     let predictedSpecies: string, prob: number;
     let wiki_page_id: number;
@@ -54,6 +69,20 @@
                 {
                     isResponse: isResponse,
                     text: text,
+                    skipTransitionDelay: immediate,
+                },
+            ],
+        ];
+    }
+
+    function addDisclosure(text: string, symbol: string, immediate = false) {
+        bubbles = [
+            ...bubbles,
+            [
+                Disclosure,
+                {
+                    text: text,
+                    symbol: symbol,
                     skipTransitionDelay: immediate,
                 },
             ],
@@ -135,6 +164,7 @@
                 icon: "psychiatry",
                 cb: addSpecimenPromptBubble,
             },
+
             // { text: "Use camera", icon: "photo_camera" },
         ];
 
@@ -147,6 +177,7 @@
                 },
             ],
         ];
+        scrollToBottom();
     }
 
     function preprocessChartData(scan: number[], downsample_step: number = 10) {
@@ -452,10 +483,11 @@ Soil type:        ${getSoilType(sand, clay)}
         pageIndex.set(2);
 
         addTextBubble(
-            "I can instantly analyze your soil using reflected light and convolutional magic.",
+            "I can instantly analyze your soil using Vis-NIR spectroscopy-- that is, reflected light-- and convolutional neural networks.",
             true,
             true,
         );
+        addDisclosure("Conversation never leaves your device.", "lock", false);
         addScanResultBubble();
         // addSpecimenPromptBubble();
     });
