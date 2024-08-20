@@ -9,7 +9,6 @@
     import { Button } from "bits-ui";
 
     export let enabled: boolean = true;
-    export let icon: string = "send";
 
     const [fadeSend, fadeReceive] = crossfade({
         duration: 500,
