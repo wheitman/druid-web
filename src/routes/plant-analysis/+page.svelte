@@ -91,6 +91,7 @@
                 },
             ],
         ];
+        scrollToBottom();
     }
 
     function removeLastBubble() {
@@ -117,7 +118,7 @@
         if (prob > 99) {
             confidenceRemark = ", no doubt! ";
         } else if (prob > 80) {
-            confidenceRemark = ", I'm almost certain. ";
+            confidenceRemark = ", I'm nearly certain. ";
         } else if (prob > 50) {
             confidenceRemark = ", I believe. ";
         } else if (prob > 25) {
@@ -146,7 +147,7 @@
         if (prob > 99) {
             confidenceRemark = "This is one of my favorites.";
         } else if (prob > 85) {
-            confidenceRemark = "Pretty confident, my child.";
+            confidenceRemark = "Quite confident indeed, my child.";
         } else if (prob > 50) {
             confidenceRemark = "You might want to check this.";
         } else if (prob > 30) {
@@ -179,6 +180,20 @@
         let [extract, wiki_page_id] = await searchWikipedia();
         addTextBubble(extract, true, true);
         addPlantIdResultBubble();
+    }
+
+    function scrollToBottom() {
+        let nestedElement = document.getElementById("chat-div");
+        nestedElement.scrollTo(0, nestedElement.scrollHeight);
+        console.log("Done scrolling, first.");
+
+        setTimeout(() => {
+            nestedElement.scrollTo({
+                top: nestedElement.scrollHeight,
+                behavior: "smooth",
+            });
+            console.log("Done scrolling.");
+        }, 200);
     }
 
     async function searchWikipedia() {
@@ -260,6 +275,7 @@
                 },
             ],
         ];
+        scrollToBottom();
     }
 
     function loadExampleSpecimen() {

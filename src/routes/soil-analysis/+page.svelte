@@ -447,60 +447,6 @@ Soil type:        ${getSoilType(sand, clay)}
         // ];
     }
 
-    function requestImageUrl() {
-        console.log("loading image");
-
-        addTextBubble(
-            "Careful, my child: I likely haven't studied plants from the Great Unknown-- ahem, the Internet. I will warn you if I see something new to me.",
-            true,
-            true,
-        );
-
-        bubbles = [
-            ...bubbles,
-            [
-                UrlInputBubble,
-                {
-                    skipTransitionDelay: false,
-                    icon: "send",
-                    cb: loadSpecimenFromUrl,
-                },
-            ],
-        ];
-        // bubbles = [
-        //     ...bubbles,
-        //     [
-        //         TextBubble,
-        //         {
-        //             isResponse: true,
-        //             text: "Ah, lovely specimem. Shall I identify it for you?",
-        //         },
-        //     ],
-        // ];
-        // bubbles = [
-        //     ...bubbles,
-        //     [
-        //         ChoiceBubble,
-        //         {
-        //             skipTransitionDelay: false,
-        //             choices: [
-        //                 {
-        //                     text: "Identify",
-        //                     icon: "search",
-        //                     cb: startPlantID,
-        //                 },
-        //                 {
-        //                     text: "Different example",
-        //                     icon: "shuffle",
-        //                     cb: loadExampleSpecimen,
-        //                 },
-        //                 // { text: "Use camera", icon: "photo_camera" },
-        //             ],
-        //         },
-        //     ],
-        // ];
-    }
-
     onMount(() => {
         primary.set(colors.clay);
 
