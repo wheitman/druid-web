@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { colors, primary } from "$lib/palettes";
+    import { colors, primary, pageIndex } from "$lib/palettes";
     import { onMount } from "svelte";
     import TextBubble from "$lib/bubbles/TextBubble.svelte";
     import ReportBubble from "$lib/bubbles/ReportBubble.svelte";
@@ -449,6 +449,7 @@ Soil type:        ${getSoilType(sand, clay)}
 
     onMount(() => {
         primary.set(colors.clay);
+        pageIndex.set(2);
 
         addTextBubble(
             "I can instantly analyze your soil using reflected light and convolutional magic.",

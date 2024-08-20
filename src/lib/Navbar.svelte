@@ -1,9 +1,9 @@
 <script lang="ts">
     import { Button } from "bits-ui";
     import "../app.css";
-    import { colors, primary } from "$lib/palettes";
+    import { colors, primary, pageIndex } from "$lib/palettes";
     import { onMount } from "svelte";
-    import { goto } from "$app/navigation";
+    import { goto, afterNavigate } from "$app/navigation";
 
     let currentColor = colors.cove;
     primary.subscribe((value) => {
@@ -11,13 +11,13 @@
     });
 
     function textColor(level: number): string {
-        let color = pages[pageIndex].color;
+        let color = pages[$pageIndex].color;
 
         return `text-${color}-${level}`;
     }
 
     function backgroundColor(level: number): string {
-        let color = pages[pageIndex].color;
+        let color = pages[$pageIndex].color;
 
         return `bg-${color}-${level}`;
     }
@@ -43,27 +43,29 @@
         },
     ];
 
-    let pageIndex = 0; // Start on the first page
+    // Start on the first page
     let baseurl = "/druid-web";
 
     function nextPage() {
-        pageIndex++;
+        $pageIndex++;
         wrapPageIndex();
 
-        goto(baseurl + pages[pageIndex].path);
+        goto(baseurl + pages[$pageIndex].path);
     }
 
+    afterNavigate(() => {});
+
     function previousPage() {
-        pageIndex--;
+        $pageIndex--;
         wrapPageIndex();
-        goto(baseurl + pages[pageIndex].path);
+        goto(baseurl + pages[$pageIndex].path);
     }
 
     function wrapPageIndex() {
-        if (pageIndex < 0) {
-            pageIndex += pages.length;
-        } else if (pageIndex >= pages.length) {
-            pageIndex -= pages.length;
+        if ($pageIndex < 0) {
+            $pageIndex += pages.length;
+        } else if ($pageIndex >= pages.length) {
+            $pageIndex -= pages.length;
         }
     }
 </script>
@@ -80,10 +82,10 @@ px-[21px] text-[15px] font-semibold text-background shadow-mini duration-0"
         <span class="material-symbols-outlined"> chevron_left </span>
     </Button.Root>
     <span class="material-symbols-outlined {textColor(400)}">
-        {pages[pageIndex].icon}
+        {pages[$pageIndex].icon}
     </span>
     <p class="text-xl {textColor(600)}">
-        {pages[pageIndex].name}
+        {pages[$pageIndex].name}
     </p>
     <Button.Root
         class="inline-flex h-full items-center justify-center rounded-input bg-dark

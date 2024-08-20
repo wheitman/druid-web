@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { colors, primary } from "$lib/palettes";
+    import { colors, primary, pageIndex } from "$lib/palettes";
     import { onMount } from "svelte";
     import TextBubble from "$lib/bubbles/TextBubble.svelte";
     import UrlInputBubble from "$lib/bubbles/UrlInputBubble.svelte";
@@ -417,6 +417,7 @@
 
     onMount(() => {
         primary.set(colors.cambridge);
+        pageIndex.set(1);
 
         addTextBubble(
             "I know 1,081 plant species. Let's see if I know yours.",

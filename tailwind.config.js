@@ -3,8 +3,15 @@
 export default {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
+  },
+
+  fontFamily: {
+    'sans': ['open-sans', 'sans-serif'],
+    'mono': ["Noto Sans Mono", "monospace"]
+  },
+  extend: {
     colors: {
-      'cambridge': {
+      cambridge: {
         '50': '#f2f7f4',
         '100': '#dfece2',
         '200': '#c2d8c9',
@@ -17,7 +24,7 @@ export default {
         '900': '#1f352a',
         '950': '#111d17',
       },
-      'clay': {
+      clay: {
         '50': '#faf6ec',
         '100': '#f4e9cd',
         '200': '#ebd39d',
@@ -30,17 +37,30 @@ export default {
         '900': '#613422',
         '950': '#381910',
       },
-
     },
-    fontFamily: {
-      'mono': ["Noto Sans Mono", "monospace"]
-    },
-    extend: {
-      dropShadow: {
-        'lg': '0px -3px 3px rgba(0, 0, 0, 0.15)',
-      }
+    dropShadow: {
+      'lg': '0px -3px 3px rgba(0, 0, 0, 0.15)',
     }
   },
-  plugins: [],
+  plugins: [function ({ addBase, theme }) {
+    // This is a simple Tailwind plugin to expose all of Tailwind's colors, 
+    // including any custom ones, as custom css properties on the :root element.
+    function extractColorVars(colorObj, colorGroup = '') {
+      return Object.keys(colorObj).reduce((vars, colorKey) => {
+        const value = colorObj[colorKey];
+
+        const newVars =
+          typeof value === 'string'
+            ? { [`--color${colorGroup}-${colorKey}`]: value }
+            : extractColorVars(value, `-${colorKey}`);
+
+        return { ...vars, ...newVars };
+      }, {});
+    }
+
+    addBase({
+      ':root': extractColorVars(theme('colors')),
+    });
+  },],
 }
 
