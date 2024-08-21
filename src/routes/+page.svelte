@@ -13,6 +13,9 @@
 	import showdown from "showdown";
 	import { Dialog, Separator, Label } from "bits-ui";
 
+	import { Canvas } from "@threlte/core";
+	import Scene from "$lib/Scene.svelte";
+
 	// import Webcam from 'webcam-easy';
 
 	import ChoiceBubble from "$lib/bubbles/ChoiceBubble.svelte";
@@ -45,12 +48,16 @@
 </svelte:head>
 
 <div class="h-[98vh] w-full" style="">
-	
-	<img
+	<div class="h-[60vh]">
+		<Canvas>
+			<Scene />
+		</Canvas>
+	</div>
+	<!-- <img
 		src="res/druid-new.svg"
 		alt="A wizard with a green robe, a green pointy hat with a leaf pattern, and a big white beard."
 		class="h-96 mx-auto pt-16"
-	/>
+	/> -->
 	<p class="mx-auto p-8 text-center">
 		{@html say(
 			`
