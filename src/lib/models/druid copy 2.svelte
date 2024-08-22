@@ -14,15 +14,11 @@ Command: npx @threlte/gltf@2.0.3 static/models/druid.glb
 
   import { OutlineEffect } from "three/addons/effects/OutlineEffect.js";
   import { T, forwardEventHandlers } from "@threlte/core";
-  import { useGltf, useGltfAnimations } from "@threlte/extras";
+  import { useGltf } from "@threlte/extras";
 
   export const ref = new Group();
 
   const gltf = useGltf("/druid-web/static/models/druid.glb");
-
-  export const { actions, mixer } = useGltfAnimations<"All Animations">(gltf);
-
-  console.log(ref);
 
   const component = forwardEventHandlers();
 
@@ -36,6 +32,8 @@ Command: npx @threlte/gltf@2.0.3 static/models/druid.glb
 
   const colors = new Uint8Array(10);
   const gradMap = new DataTexture(colors, colors.length, 1, RedFormat);
+
+  let nose: THREE.Mesh;
 </script>
 
 <T is={ref} dispose={false} {...$$restProps} bind:this={$component}>
@@ -51,7 +49,11 @@ Command: npx @threlte/gltf@2.0.3 static/models/druid.glb
     <T.Mesh geometry={gltf.nodes.Eye.geometry}>
       <T.MeshToonMaterial color={inkColor} />
     </T.Mesh>
-    <T.Mesh geometry={gltf.nodes.Nose.geometry} material={gltf.materials.Skin}>
+    <T.Mesh
+      geometry={gltf.nodes.Nose.geometry}
+      material={gltf.materials.Skin}
+      bind:ref={nose}
+    >
       <T.MeshToonMaterial color={skinColor} />
     </T.Mesh>
     <T.Mesh geometry={gltf.nodes.Eyebrow.geometry}>

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import { T } from "@threlte/core";
     import {
         ContactShadows,
@@ -6,22 +6,49 @@
         Grid,
         OrbitControls,
     } from "@threlte/extras";
-    import { AmbientLight, DirectionalLight, PerspectiveCamera } from "three";
+    import {
+        AmbientLight,
+        DirectionalLight,
+        Group,
+        PerspectiveCamera,
+    } from "three";
+    import { tweened } from "svelte/motion";
     import Druid from "$lib/models/druid.svelte";
+
+    import CustomRenderer from "./CustomRenderer.svelte";
+
+    let druid_mesh: Group;
+    let beard_influence;
+    let mustache_influence;
+
+    setTimeout(() => {
+        beard_influence = druid_mesh.children[18].morphTargetInfluences[0];
+        mustache_influence = druid_mesh.children[19].morphTargetInfluences[0];
+        druid_mesh.children[18].morphTargetInfluences[0] = 0;
+        druid_mesh.children[19].morphTargetInfluences[0] = 0;
+        beard_influence = 0;
+        mustache_influence = 1;
+        console.log(druid_mesh.children[18]);
+    }, 1000);
 </script>
 
 <T.PerspectiveCamera makeDefault position={[0, 0, 20]} fov={15}>
-    <!-- <OrbitControls
+    <OrbitControls
         autoRotate
         enableZoom={false}
         enableDamping
         autoRotateSpeed={0}
         target.y={1.5}
-    /> -->
+    />
 </T.PerspectiveCamera>
 
-<T.DirectionalLight intensity={1.8} position.x={15} position.y={10} />
-<T.AmbientLight intensity={2.5} />
+<T.DirectionalLight
+    intensity={2.5}
+    position.z={5}
+    position.x={15}
+    position.y={15}
+/>
+<T.AmbientLight intensity={0} />
 
 <!-- <Grid
     position.y={-0.001}
@@ -35,7 +62,7 @@
 <!-- <ContactShadows scale={10} blur={2} far={2.5} opacity={0.5} /> -->
 
 <Float floatIntensity={1} floatingRange={[0, 0.3]} speed={4}>
-    <Druid position.y={-2.5} />
+    <Druid position.y={-0.5} bind:ref={druid_mesh} />
 </Float>
 
 <!-- <Float floatIntensity={1} floatingRange={[0, 1]}>
