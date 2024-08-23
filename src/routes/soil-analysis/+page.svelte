@@ -172,6 +172,69 @@
         }
     }
 
+    function showOnnxModel() {
+        addTextBubble(
+            "A great many neurons, just like yours. For soil, I use three 1D convolutional layers, which are great at reading signals like those from a spectrometer. Would you like me to open a graph of my neural network?",
+        );
+
+        bubbles = [
+            ...bubbles,
+            [
+                ChoiceBubble,
+                {
+                    choices: [
+                        // {
+                        //     text: "How confident are you?",
+                        //     icon: "percent",
+                        //     cb: sayConfidence,
+                        // },
+
+                        // {
+                        //     text: "Describe it",
+                        //     icon: "info",
+                        //     cb: describeScan,
+                        // },
+                        // {
+                        //     text: "Open Wikipedia",
+                        //     icon: "menu_book",
+                        //     cb: goToWikipedia,
+                        // },
+                        {
+                            text: "Yes, open brain graph",
+                            icon: "network_node",
+                            cb: () => {
+                                addTextBubble(
+                                    "Very good. What you're about to see is running right on your device.",
+                                    true,
+                                    true,
+                                );
+
+                                setTimeout(() => {
+                                    window
+                                        .open(
+                                            "https://netron.app/?url=https://github.com/wheitman/druid-web/blob/main/static/spectroscopy.onnx",
+                                        )
+                                        .focus();
+
+                                    addScanResultBubble();
+                                }, 3000);
+                            },
+                        },
+                        {
+                            text: "New scan",
+                            icon: "psychiatry",
+                            cb: addSpecimenPromptBubble,
+                        },
+
+                        // { text: "Use camera", icon: "photo_camera" },
+                    ],
+                },
+            ],
+        ];
+
+        scrollToBottom();
+    }
+
     function addScanResultBubble() {
         let choices = [
             // {
@@ -204,6 +267,11 @@
                 text: "Can I load new scans?",
                 icon: "help",
                 cb: explainScanLimitations,
+            },
+            {
+                text: "What's your brain look like?",
+                icon: "help",
+                cb: showOnnxModel,
             },
 
             // { text: "Use camera", icon: "photo_camera" },

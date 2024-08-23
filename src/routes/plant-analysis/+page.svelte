@@ -193,6 +193,70 @@
         addPlantIdResultBubble();
     }
 
+    function showOnnxModel() {
+        addTextBubble(
+            "A great many neurons, just like yours. For identifying plants, I use a pre-trained model with a Resnet-18 backbone. There are a great many convolutional layers and loops. Would you like me to open a graph of my neural network?",
+        );
+
+        bubbles = [
+            ...bubbles,
+            [
+                ChoiceBubble,
+                {
+                    choices: [
+                        // {
+                        //     text: "How confident are you?",
+                        //     icon: "percent",
+                        //     cb: sayConfidence,
+                        // },
+
+                        // {
+                        //     text: "Describe it",
+                        //     icon: "info",
+                        //     cb: describeScan,
+                        // },
+                        // {
+                        //     text: "Open Wikipedia",
+                        //     icon: "menu_book",
+                        //     cb: goToWikipedia,
+                        // },
+                        {
+                            text: "Yes, open brain graph",
+                            icon: "network_node",
+                            cb: () => {
+                                addTextBubble(
+                                    "Very good. What you're about to see is running right on your device.",
+                                    true,
+                                    true,
+                                );
+
+                                setTimeout(() => {
+                                    window;
+                                    window
+                                        .open(
+                                            "https://netron.app/?url=https://github.com/wheitman/druid-web/blob/main/static/plantnet-18.onnx",
+                                        )
+                                        .focus();
+
+                                    addPlantIdResultBubble();
+                                }, 3000);
+                            },
+                        },
+                        {
+                            text: "New scan",
+                            icon: "psychiatry",
+                            cb: addSpecimenPromptBubble,
+                        },
+
+                        // { text: "Use camera", icon: "photo_camera" },
+                    ],
+                },
+            ],
+        ];
+
+        scrollToBottom();
+    }
+
     async function goToWikipedia() {
         let [extract, wiki_page_id] = await searchWikipedia();
 
@@ -289,6 +353,11 @@
                     text: "New plant",
                     icon: "psychiatry",
                     cb: addSpecimenPromptBubble,
+                },
+                {
+                    text: "What's your brain look like?",
+                    icon: "help",
+                    cb: showOnnxModel,
                 },
                 // { text: "Use camera", icon: "photo_camera" },
             ];
