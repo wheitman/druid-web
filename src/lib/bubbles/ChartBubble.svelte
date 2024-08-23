@@ -62,6 +62,16 @@
                     y: {
                         beginAtZero: true,
                         suggestedMax: 70,
+                        title: {
+                            text: "Reflectance (%)",
+                            display: true,
+                        },
+                    },
+                    x: {
+                        title: {
+                            text: "Wavelength (nm, soil 'color')",
+                            display: true,
+                        },
                     },
                 },
                 plugins: {
@@ -93,7 +103,7 @@
     style="background-color: {bgColor}; border-color: {$primary}; border-width: 0.15rem; color: {textColor};"
     transition:fly={{ delay: 0, duration: 500 }}
 >
-    <canvas id={canvasId} height="192"></canvas>
+    <canvas id={canvasId} height="190px"></canvas>
 </div>
 
 <style lang="postcss">

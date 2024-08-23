@@ -64,6 +64,8 @@
 
     let lastBubbleAdded = null;
 
+    let limitationsAlreadyExplained = false;
+
     function addTextBubble(
         text: string,
         isResponse: boolean = true,
@@ -82,6 +84,13 @@
                 },
             ],
         ];
+    }
+
+    async function goToPoster() {
+        console.log("The page id is ", wiki_page_id);
+        window.open("https://heit.mn/mas-poster").focus();
+
+        addScanResultBubble();
     }
 
     function addDisclosure(text: string, symbol: string, immediate = false) {
@@ -150,6 +159,19 @@
         return Math.round((x + Number.EPSILON) * 10 ** places) / 10 ** places;
     }
 
+    function explainScanLimitations() {
+        if (!limitationsAlreadyExplained) {
+            addTextBubble(
+                "It's complicated. First, you'll need a spectroradiometer (that's the mysterious box that scans the soil). You'll then need some way to connect it to me so that I can read it. Perhaps in the future I can learn a spell to handle it for you, but in the meantime, my examples are from the OSSL dataset.",
+            );
+            addScanResultBubble();
+            limitationsAlreadyExplained = true;
+        } else {
+            addTextBubble("Must I repeat myself?");
+            addScanResultBubble();
+        }
+    }
+
     function addScanResultBubble() {
         let choices = [
             // {
@@ -172,6 +194,16 @@
                 text: "New scan",
                 icon: "psychiatry",
                 cb: addSpecimenPromptBubble,
+            },
+            {
+                text: "Open research poster",
+                icon: "info",
+                cb: goToPoster,
+            },
+            {
+                text: "Can I load new scans?",
+                icon: "help",
+                cb: explainScanLimitations,
             },
 
             // { text: "Use camera", icon: "photo_camera" },
@@ -368,6 +400,7 @@ Soil type:        ${getSoilType(sand, clay)}
     }
 
     async function makePrediction(scan: number[]) {
+        limitationsAlreadyExplained = false;
         // prediction_in_progress = true;
 
         // This is the MOST IMPORTANT LINE:

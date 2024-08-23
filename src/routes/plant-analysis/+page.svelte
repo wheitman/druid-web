@@ -35,6 +35,9 @@
         "plants/1497667.jpg",
     ];
 
+    let confidenceAlreadyAsked = false;
+    let descriptionAlreadyAsked = false;
+
     let predictedSpecies: string, prob: number;
     let wiki_page_id: number;
 
@@ -109,6 +112,8 @@
     }
 
     async function startPlantID() {
+        descriptionAlreadyAsked = false;
+        confidenceAlreadyAsked = false;
         console.log("Identifying plant!");
         addTextBubble("Thinking...", true, true);
 
@@ -153,21 +158,37 @@
     }
 
     function sayConfidence() {
-        let confidenceRemark;
-        if (prob > 99) {
-            confidenceRemark = "This is one of my favorites.";
-        } else if (prob > 85) {
-            confidenceRemark = "Quite confident indeed, my child.";
-        } else if (prob > 50) {
-            confidenceRemark = "You might want to check this.";
-        } else if (prob > 30) {
-            confidenceRemark =
-                "It's likely I haven't seen your plant yet, so I've given my best guess.";
+        if (!confidenceAlreadyAsked) {
+            let confidenceRemark;
+            if (prob > 99) {
+                confidenceRemark = "This is one of my favorites.";
+            } else if (prob > 85) {
+                confidenceRemark = "Quite confident indeed, my child.";
+            } else if (prob > 50) {
+                confidenceRemark = "You might want to check this.";
+            } else if (prob > 30) {
+                confidenceRemark =
+                    "It's likely I haven't seen your plant yet, so I've given my best guess.";
+            } else {
+                confidenceRemark = "Not confident at all!";
+            }
+            addTextBubble(`${Math.floor(prob)}%. ${confidenceRemark}`);
+            confidenceAlreadyAsked = true;
         } else {
-            confidenceRemark = "Not confident at all!";
+            if (prob < 50)
+                addTextBubble(
+                    `I've just told you. Must you humiliate me? `,
+                    true,
+                    false,
+                );
+            else {
+                addTextBubble(
+                    `Scroll up and read again, my muggle friend.`,
+                    true,
+                    false,
+                );
+            }
         }
-        addTextBubble(`${Math.floor(prob)}%. ${confidenceRemark}`);
-        // addTextBubble(`How about another go? `, true, false);
 
         addPlantIdResultBubble();
     }
@@ -187,9 +208,15 @@
     }
 
     async function describeFromWikipedia() {
-        let [extract, wiki_page_id] = await searchWikipedia();
-        addTextBubble(extract, true, true);
-        addPlantIdResultBubble();
+        if (!descriptionAlreadyAsked) {
+            let [extract, wiki_page_id] = await searchWikipedia();
+            addTextBubble(extract, true, true);
+            addPlantIdResultBubble();
+            descriptionAlreadyAsked = true;
+        } else {
+            addTextBubble("Am I speaking to a goldfish?", true, true);
+            addPlantIdResultBubble();
+        }
     }
 
     function scrollToBottom() {
