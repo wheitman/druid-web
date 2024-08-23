@@ -15,7 +15,7 @@
 
         // let Player = Lottie.LottiePlayer;
 
-        let player = document.getElementById("lottie-player");
+        // let player = document.getElementById("lottie-player");
         // player.speed = 10;
     });
 
@@ -36,16 +36,16 @@
 </script>
 
 <div class:standalone>
-    <!-- <x-gif src="/druid-web/res/druid.gif"></x-gif>
-    <img src="/druid-web/res/druid.gif" alt="The druid wizard." /> -->
+    <!-- <x-gif src="/druid-web/res/druid.gif"></x-gif> -->
+    <img src="/druid-web/res/druid-noloop.gif" alt="The druid wizard." />
 
-    <lottie-player
+    <!-- <lottie-player
         id="lottie-player"
         autoplay
         mode="normal"
         src="res/druid-lottie.json"
     >
-    </lottie-player>
+    </lottie-player> -->
 </div>
 
 <style lang="postcss">
