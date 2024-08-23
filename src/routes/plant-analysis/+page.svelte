@@ -1,5 +1,10 @@
 <script lang="ts">
-    import { colors, primary, pageIndex } from "$lib/palettes";
+    import {
+        colors,
+        primary,
+        pageIndex,
+        globalLottieIndex,
+    } from "$lib/palettes";
     import { onMount } from "svelte";
     import TextBubble from "$lib/bubbles/TextBubble.svelte";
     import Disclosure from "$lib/bubbles/Disclosure.svelte";
@@ -38,6 +43,8 @@
         isResponse: boolean = true,
         immediate = false,
     ) {
+        $globalLottieIndex++;
+
         bubbles = [
             ...bubbles,
             [
@@ -46,6 +53,7 @@
                     isResponse: isResponse,
                     text: text,
                     skipTransitionDelay: immediate,
+                    lottieIndex: $globalLottieIndex,
                 },
             ],
         ];
@@ -434,6 +442,7 @@
     onMount(() => {
         primary.set(colors.cambridge);
         pageIndex.set(1);
+        $globalLottieIndex = 0;
 
         addTextBubble(
             "I know 1,081 plant species. Let's see if I know yours.",

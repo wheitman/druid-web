@@ -1,5 +1,10 @@
 <script lang="ts">
-    import { colors, primary, pageIndex } from "$lib/palettes";
+    import {
+        colors,
+        primary,
+        pageIndex,
+        globalLottieIndex,
+    } from "$lib/palettes";
     import { onMount } from "svelte";
     import TextBubble from "$lib/bubbles/TextBubble.svelte";
     import Disclosure from "$lib/bubbles/Disclosure.svelte";
@@ -57,11 +62,14 @@
     let course_fragments_percentile = -1.0;
     let cec_percentile = -1;
 
+    let lastBubbleAdded = null;
+
     function addTextBubble(
         text: string,
         isResponse: boolean = true,
         immediate = false,
     ) {
+        $globalLottieIndex++;
         bubbles = [
             ...bubbles,
             [
@@ -70,6 +78,7 @@
                     isResponse: isResponse,
                     text: text,
                     skipTransitionDelay: immediate,
+                    lottieIndex: $globalLottieIndex,
                 },
             ],
         ];
@@ -481,6 +490,7 @@ Soil type:        ${getSoilType(sand, clay)}
     onMount(() => {
         primary.set(colors.clay);
         pageIndex.set(2);
+        $globalLottieIndex = 0;
 
         addTextBubble(
             "I can instantly analyze your soil using Vis-NIR spectroscopy-- that is, reflected light-- and convolutional neural networks.",

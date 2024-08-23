@@ -46,3 +46,5 @@ export let colors = {
 export let primary = writable(colors.cove)
 
 export let pageIndex = writable(0)
+
+export let globalLottieIndex = writable(0)

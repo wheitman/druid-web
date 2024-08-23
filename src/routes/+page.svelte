@@ -80,7 +80,7 @@ I am well-versed in the arts of [plant identification](/druid-web/plant-analysis
 </svelte:head>
 
 <div class="h-[98vh] w-full" style="">
-	<AnimatedDruid />
+	<AnimatedDruid standalone />
 	<!-- <div class="h-[60vh]">
 		<Canvas>
 			<Scene />

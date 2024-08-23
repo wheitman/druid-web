@@ -1,10 +1,14 @@
 <script lang="ts">
-    import { colors, primary } from "$lib/palettes";
+    import AnimatedDruid from "$lib/AnimatedDruid.svelte";
+    import { colors, primary, globalLottieIndex } from "$lib/palettes";
     export let isResponse: boolean = false;
     import { fade, crossfade, fly } from "svelte/transition";
 
     let bgColor: string;
     let textColor: string;
+
+    export let lottieIndex;
+
     export let skipTransitionDelay: boolean = false;
     export let text;
 
@@ -24,8 +28,12 @@
     class="flex flex-row m-2 items-end"
     transition:fly={{ delay: skipTransitionDelay ? 0 : 500, duration: 500 }}
 >
-    {#if isResponse}
-        <img src="druid-new-thick.svg" alt="" class="max-w-16" />
+    {#if isResponse && lottieIndex == $globalLottieIndex}
+        <!-- <img src="druid-new-thick.svg" alt="" class="max-w-16" /> -->
+        <!-- <img src="res/druid-noloop.gif" alt="" class="max-w-16" /> -->
+        <span class="min-w-16 w-16">
+            <AnimatedDruid />
+        </span>
     {/if}
     <div
         class="rounded-xl ml-2 p-4"

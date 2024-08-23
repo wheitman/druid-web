@@ -7,6 +7,8 @@
     // import gifjs from "$lib/gif";
     import druid_lottie from "$lib/druid-lottie.json";
 
+    export let standalone = false;
+
     let Lottie;
     onMount(async () => {
         Lottie = (await import("@lottiefiles/lottie-player")).default;
@@ -33,7 +35,7 @@
     // }
 </script>
 
-<div class="h-[60vh] px-8">
+<div class:standalone>
     <!-- <x-gif src="/druid-web/res/druid.gif"></x-gif>
     <img src="/druid-web/res/druid.gif" alt="The druid wizard." /> -->
 
@@ -47,4 +49,9 @@
 </div>
 
 <style lang="postcss">
+    .standalone {
+        height: 60vh;
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
 </style>
