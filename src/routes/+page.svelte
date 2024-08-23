@@ -19,15 +19,47 @@
 	// import Webcam from 'webcam-easy';
 
 	import ChoiceBubble from "$lib/bubbles/ChoiceBubble.svelte";
+	import AnimatedDruid from "$lib/AnimatedDruid.svelte";
+	import { writable } from "svelte/store";
+
+	let console_text = writable("");
 
 	onMount(() => {
 		primary.set(colors.cove);
+
+		say(`Greetings. I'm **Druid**, your virtual companion to the natural world.
+I am well-versed in the arts of [plant identification](/druid-web/plant-analysis) and [soil analysis](/druid-web/soil-analysis).`);
 	});
 
-	function say(text: string) {
+	function convertMarkdown(text: string) {
 		var converter = new showdown.Converter();
-		let html = converter.makeHtml(text);
-		return html;
+
+		return converter.makeHtml(text);
+	}
+
+	function say(text: string, limit: number = 0, delay_ms: number = 70) {
+		var converter = new showdown.Converter();
+
+		let all_parts = converter.makeHtml(text).split(" ");
+		let length = all_parts.length;
+
+		let html = "";
+		let i;
+		for (i = 0; i < limit && i < length; i++) {
+			html += all_parts[i] + " ";
+		}
+
+		// html = html.split(" ");
+
+		// console.log(html);
+
+		$console_text = html;
+
+		if (i < length) {
+			setTimeout(() => {
+				say(text, limit + 1, delay_ms);
+			}, delay_ms);
+		}
 	}
 
 	const items = [
@@ -48,23 +80,20 @@
 </svelte:head>
 
 <div class="h-[98vh] w-full" style="">
-	<div class="h-[60vh]">
+	<AnimatedDruid />
+	<!-- <div class="h-[60vh]">
 		<Canvas>
 			<Scene />
 		</Canvas>
-	</div>
+	</div> -->
 	<!-- <img
 		src="res/druid-new.svg"
 		alt="A wizard with a green robe, a green pointy hat with a leaf pattern, and a big white beard."
 		class="h-96 mx-auto pt-16"
 	/> -->
-	<p class="mx-auto p-8 text-center">
-		{@html say(
-			`
-Greetings. I'm **Druid**, your virtual companion to the natural world.
-I am well-versed in the arts of [plant identification](/druid-web/plant-analysis) and [soil analysis](/druid-web/soil-analysis).`,
-		)}
-	</p>
+	<div class="p-8">
+		{@html $console_text}
+	</div>
 
 	<Dialog.Root>
 		<Dialog.Trigger
@@ -91,7 +120,7 @@ I am well-versed in the arts of [plant identification](/druid-web/plant-analysis
 					class="-mx-5 mb-6 mt-5 block h-px bg-slate-200"
 				/>
 				<Dialog.Description class="text-sm text-foreground-alt">
-					{@html say(`
+					{@html convertMarkdown(`
 ## Acknowledgements
 
 Druid's magical powers all come from the open source community.

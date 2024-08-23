@@ -15,8 +15,10 @@
 		"@sveltejs/adapter-static": "^3.0.1",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
+		"@types/jsdom": "^21.1.7",
 		"autoprefixer": "^10.4.20",
 		"postcss": "^8.4.41",
+		"sass": "^1.77.8",
 		"svelte": "^4.2.7",
 		"svelte-check": "^3.6.0",
 		"tailwindcss": "^3.4.10",
@@ -26,6 +28,9 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@lottiefiles/dotlottie-svelte": "^0.3.15",
+		"@lottiefiles/dotlottie-web": "^0.30.3",
+		"@lottiefiles/lottie-player": "^2.0.4",
 		"@threlte/core": "^7.3.1",
 		"@threlte/extras": "^8.11.5",
 		"@types/jimp": "^0.2.28",
@@ -38,6 +43,7 @@
 		"chart.js": "^4.4.3",
 		"cropperjs": "^1.6.2",
 		"jimp": "^0.22.12",
+		"jsdom": "^24.1.1",
 		"ndarray": "^1.0.19",
 		"ndarray-ops": "^1.2.2",
 		"onnxruntime-web": "^1.18.0",
@@ -47,6 +53,7 @@
 		"socket.io-client": "^4.7.5",
 		"svelte-chartjs": "^3.1.5",
 		"three": "^0.167.1",
-		"webcam-easy": "^1.1.1"
+		"webcam-easy": "^1.1.1",
+		"x-gif": "^1.0.5"
 	}
 }

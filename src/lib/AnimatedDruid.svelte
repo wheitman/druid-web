@@ -4,35 +4,46 @@
     import { colors, primary } from "$lib/palettes";
     import { onMount } from "svelte";
     import { goto } from "$app/navigation";
+    // import gifjs from "$lib/gif";
+    import druid_lottie from "$lib/druid-lottie.json";
 
-    
+    let Lottie;
+    onMount(async () => {
+        Lottie = (await import("@lottiefiles/lottie-player")).default;
+
+        // let Player = Lottie.LottiePlayer;
+
+        let player = document.getElementById("lottie-player");
+        // player.speed = 10;
+    });
+
+    // function lottieStalled(event: Event) {
+    //     console.log(`Stalled: ${event}`);
+    // }
+
+    // function onLottiePlaying(event: Event) {
+    //     console.log(`Stalled: ${event}`);
+    // }
+
+    // function onLottiePaused(event: Event) {
+    //     console.log(`Stalled: ${event}`);
+    // }
+    // function onLottieCanPlay(event: Event) {
+    //     console.log(`Stalled: ${event}`);
+    // }
 </script>
 
-<div
-    class="h-16 drop-shadow-lg bottom-0 absolute w-full flex flex-row items-center justify-between gap-x-2"
-    style="background-color: {$primary['100']};"
->
-    <Button.Root
-        class="inline-flex h-full items-center justify-center rounded-input bg-dark
-px-[21px] text-[15px] font-semibold text-background shadow-mini duration-0"
-        on:click={previousPage}
+<div class="h-[60vh] px-8">
+    <!-- <x-gif src="/druid-web/res/druid.gif"></x-gif>
+    <img src="/druid-web/res/druid.gif" alt="The druid wizard." /> -->
+
+    <lottie-player
+        id="lottie-player"
+        autoplay
+        mode="normal"
+        src="res/druid-lottie.json"
     >
-        <span class="material-symbols-outlined"> chevron_left </span>
-    </Button.Root>
-    <span class="material-symbols-outlined {textColor(400)}">
-        {pages[pageIndex].icon}
-    </span>
-    <p class="text-xl {textColor(600)}">
-        {pages[pageIndex].name}
-    </p>
-    <Button.Root
-        class="inline-flex h-full items-center justify-center rounded-input bg-dark
-  px-[21px] text-[15px] font-semibold text-background shadow-mini
-  hover:{backgroundColor(100)}  active:{backgroundColor(200)} duration-0"
-        on:click={nextPage}
-    >
-        <span class="material-symbols-outlined"> chevron_right </span>
-    </Button.Root>
+    </lottie-player>
 </div>
 
 <style lang="postcss">

@@ -29,10 +29,10 @@ Command: npx @threlte/gltf@2.0.3 static/models/druid.glb
   let alpha = 0.5;
   let beta = 0.5;
   let gamma = 0.5;
-  const skinColor = new Color().setHex(0xdfb465);
-  const fabricColor = new Color().setHex(0x79a48a);
+  const skinColor = new Color().setHex(0xfba659);
+  const fabricColor = new Color().setHex(0xa0d561);
   const hairColor = new Color().setHex(0xffffff);
-  const inkColor = new Color().setHex(0x000000);
+  const inkColor = new Color().setHex(0x38634c);
 
   const colors = new Uint8Array(10);
   const gradMap = new DataTexture(colors, colors.length, 1, RedFormat);
@@ -44,6 +44,7 @@ Command: npx @threlte/gltf@2.0.3 static/models/druid.glb
   {:then gltf}
     <T.Mesh geometry={gltf.nodes.NurbsPath.geometry}>
       <T.MeshToonMaterial color={fabricColor} />
+      <!-- <T.MeshBasicMaterial color={fabricColor} /> -->
     </T.Mesh>
     <T.Mesh geometry={gltf.nodes.Head.geometry}>
       <T.MeshToonMaterial color={skinColor} />
